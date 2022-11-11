@@ -17,9 +17,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var fireBaseAuth: FirebaseAuth
 
-    private val CORRECT_USER = "ivan@gmail.com"
-    private val CORRECT_PASSWORD = "1234"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
