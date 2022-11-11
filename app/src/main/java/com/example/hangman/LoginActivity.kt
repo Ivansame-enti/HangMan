@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import com.example.hangman.databinding.ActivityLoginBinding
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var fireBaseAuth: FirebaseAuth
 
     private val CORRECT_USER = "ivan@gmail.com"
     private val CORRECT_PASSWORD = "1234"
@@ -24,10 +26,23 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fireBaseAuth = FirebaseAuth.getInstance()
+
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
 
+
+            fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+
+                finish()
+
+            }.addOnFailureListener{
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            }
+/*
             if(username == CORRECT_USER && password == CORRECT_PASSWORD){
 
                 binding.progressBar.visibility = View.VISIBLE
@@ -44,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
             } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            }
+            }*/
         }
 
         binding.userInput.setOnFocusChangeListener { view, b ->

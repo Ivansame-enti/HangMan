@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "356762019959",
+    "project_id": "enti3-disseny",
+    "storage_bucket": "enti3-disseny.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356762019959:android:d60b964b7506f5f53bfe72",
+        "android_client_info": {
+          "package_name": "com.example.hangman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356762019959-bjvsga1mq4vgemsabo2tp12k30at3cg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw8ADd_v831h6SVClsfFZm8_38FpRcP5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356762019959-bjvsga1mq4vgemsabo2tp12k30at3cg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
