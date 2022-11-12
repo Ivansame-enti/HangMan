@@ -59,6 +59,19 @@ class LoginActivity : AppCompatActivity() {
             }*/
         }
 
+        binding.anonLoginButton.setOnClickListener{
+            fireBaseAuth.signInAnonymously()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+        }
+
         binding.userInput.setOnFocusChangeListener { view, b ->
             if(!b){ //Cuando perdemos el focus
                 val username = binding.userInput.text.toString()
