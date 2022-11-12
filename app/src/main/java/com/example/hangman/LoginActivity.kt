@@ -28,16 +28,16 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
+            if(username.isNotEmpty() && password.isNotEmpty()) {
+                fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
 
+                    finish()
 
-            fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-
-                finish()
-
-            }.addOnFailureListener{
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }
             }
 /*
             if(username == CORRECT_USER && password == CORRECT_PASSWORD){
