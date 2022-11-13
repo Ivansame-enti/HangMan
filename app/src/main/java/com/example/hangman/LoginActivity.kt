@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if(username.isNotEmpty() && password.isNotEmpty()) {
-                fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
+                /*fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
 
@@ -37,6 +37,12 @@ class LoginActivity : AppCompatActivity() {
 
                 }.addOnFailureListener {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }*/
+                fireBaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener {
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+
+                    finish()
                 }
             }
 /*
