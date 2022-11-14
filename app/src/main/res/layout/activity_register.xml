@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="50dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/appNameImageContentDesc"
         android:scaleType="centerInside"
@@ -62,6 +61,7 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/passwodTextField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/postitImage">
@@ -92,6 +92,7 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/confirmPasswodTextField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameTextField">
@@ -122,6 +123,7 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwodTextField">
@@ -170,6 +172,7 @@
         app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerButton"
+        app:layout_constraintVertical_bias="0.37"
         app:strokeColor="#000000"
         app:strokeWidth="5dp"
         tools:visibility="visible" />
