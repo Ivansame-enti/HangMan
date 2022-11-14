@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/hangedout_login"
-    tools:context=".LoginRegister.RegisterActivity">
+    tools:context=".loginRegister.RegisterActivity">
 
     <ImageView
         android:id="@+id/nameAppImage"
@@ -30,13 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/postitImageContentDesc"
         android:scaleType="centerInside"
         android:scaleX="0.8"
         android:scaleY="0.8"
-        app:layout_constraintBottom_toTopOf="@+id/goBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAppImage"
@@ -61,7 +59,6 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/passwodTextField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/postitImage">
@@ -80,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="74dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="64dp"
         android:hint="@string/password"
         app:boxBackgroundColor="#FBFBFB"
@@ -92,7 +89,6 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/confirmPasswodTextField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameTextField">
@@ -123,7 +119,6 @@
         app:boxStrokeErrorColor="#C62424"
         app:boxStrokeWidth="5dp"
         app:boxStrokeWidthFocused="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwodTextField">
@@ -140,7 +135,7 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="90dp"
         android:backgroundTint="#9FF44336"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
@@ -159,6 +154,7 @@
         android:id="@+id/goBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="#050505"
         android:paddingLeft="64dp"
