@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import com.example.hangman.LoginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
@@ -29,20 +30,14 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if(username.isNotEmpty() && password.isNotEmpty()) {
-                /*fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
+                fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
 
                     finish()
 
                 }.addOnFailureListener {
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                }*/
-                fireBaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
-
-                    finish()
+                    Toast.makeText(this, "Wrong username or password ", Toast.LENGTH_SHORT).show()
                 }
             }
 /*
@@ -65,6 +60,11 @@ class LoginActivity : AppCompatActivity() {
             }*/
         }
 
+        binding.registerButtonLogin.setOnClickListener {
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.anonLoginButton.setOnClickListener{
             fireBaseAuth.signInAnonymously()
                 .addOnCompleteListener(this) { task ->
@@ -72,8 +72,7 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
+                        Toast.makeText(this, "Wrong username or password ", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -85,7 +84,6 @@ class LoginActivity : AppCompatActivity() {
                     binding.userInput.error = "Invalid username"
                 else binding.userInput.error = null
             }
-
         }
     }
 }
