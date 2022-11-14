@@ -29,21 +29,24 @@ class RegisterActivity : AppCompatActivity() {
             val password2 = binding.confirmPasswordInput.text.toString()
 
             if(password==password2) {
-                fireBaseAuth.createUserWithEmailAndPassword(username, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            val user = fireBaseAuth.currentUser
-                            //updateUI(user)
-                            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(
-                                baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //updateUI(null)
+                if(password.count() >=8) {
+                    fireBaseAuth.createUserWithEmailAndPassword(username, password)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                val user = fireBaseAuth.currentUser
+                                //updateUI(user)
+                                val intent =
+                                    Intent(this@RegisterActivity, LoginActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                Toast.makeText(
+                                    baseContext, "Authentication failed.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                //updateUI(null)
+                            }
                         }
-                    }
+                }else Toast.makeText(this, "Passwords need at least 8 characters", Toast.LENGTH_SHORT).show()
             } else Toast.makeText(this, "Passwords don't match", Toast.LENGTH_SHORT).show()
         }
 
