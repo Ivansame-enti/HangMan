@@ -21,6 +21,12 @@ class LoginActivity : AppCompatActivity() {
 
         fireBaseAuth = FirebaseAuth.getInstance()
 
+        if (fireBaseAuth.getCurrentUser() != null) {
+            val intent = Intent(this@LoginActivity, MainActivity::class.java);
+            startActivity(intent);
+            finish();
+        }
+
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
@@ -35,24 +41,6 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Wrong username or password ", Toast.LENGTH_SHORT).show()
                 }
             }
-/*
-            if(username == CORRECT_USER && password == CORRECT_PASSWORD){
-
-                binding.progressBar.visibility = View.VISIBLE
-
-                CoroutineScope(Dispatchers.Default).launch {
-
-                    delay(3000)
-
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
-
-                    finish()
-                }
-
-            } else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            }*/
         }
 
         binding.registerButtonLogin.setOnClickListener {
@@ -66,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(this, "Error ", Toast.LENGTH_SHORT).show()
                     }
