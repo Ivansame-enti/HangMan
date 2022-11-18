@@ -9,4 +9,6 @@
     <string name="go_back">Go Back</string>
     <string name="play">Play!</string>
     <string name="play_anonymously">Play Anonymously</string>
+    <string name="you_are_loged_as">You are loged as:</string>
+    <string name="current_email">TextView</string>
 </resources>

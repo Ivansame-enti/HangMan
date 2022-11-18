@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import com.example.hangman.loginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
@@ -22,15 +23,22 @@ class LoginActivity : AppCompatActivity() {
         fireBaseAuth = FirebaseAuth.getInstance()
 
         if (fireBaseAuth.getCurrentUser() != null) {
-            val intent = Intent(this@LoginActivity, MainActivity::class.java);
-            startActivity(intent);
-            finish();
+            binding.LogedLoginTextView.visibility= View.VISIBLE
+            binding.emailLoginTextView.visibility= View.VISIBLE
+            binding.emailLoginTextView.text = fireBaseAuth.getCurrentUser()?.email ?: "null"
         }
 
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
-            if(username.isNotEmpty() && password.isNotEmpty()) {
+            if(username.isEmpty() && password.isEmpty() && fireBaseAuth.getCurrentUser() != null){ //Cargamos el juego con el usuario ya logueado
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+
+                finish()
+            }
+
+            if(username.isNotEmpty() && password.isNotEmpty()) {  //Cargamos el juego con el nuevo login
                 fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
