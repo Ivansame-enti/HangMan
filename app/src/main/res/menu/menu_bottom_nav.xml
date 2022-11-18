@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/colorsButton"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="Colors" />
+    <item
+        android:id="@+id/numbersButton"
+        android:icon="@drawable/ic_baseline_catching_pokemon_24"
+        android:title="Numbers" />
+    <item
+        android:id="@+id/quotesButton"
+        android:icon="@drawable/ic_baseline_emoji_emotions_24"
+        android:title="Quotes" />
+</menu>
