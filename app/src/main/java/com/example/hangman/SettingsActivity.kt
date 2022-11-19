@@ -34,7 +34,6 @@ class SettingsActivity : AppCompatActivity() {
                 putBoolean("notification",notificationFlag)
                 putBoolean("advertising",advertisingFlag)
             }.apply()
-            Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
         }
         fun loadData(){
             val sharedPref = getSharedPreferences("prefs",Context.MODE_PRIVATE)
@@ -44,7 +43,6 @@ class SettingsActivity : AppCompatActivity() {
             advertising = sharedPref.getBoolean("advertising",true)
         }
         loadData()
-        Toast.makeText(this, notification.toString(), Toast.LENGTH_SHORT).show()
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -145,9 +143,10 @@ class SettingsActivity : AppCompatActivity() {
                 advertisingFlag = false;
             }
         }
-        loadData()
+
         binding.backButton.setOnClickListener{
             saveData()
+            Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
         }
 
     }
