@@ -2,4 +2,34 @@
     <string name="app_name">HangMan</string>
     <string name="username">Username</string>
     <string name="password">password</string>
+    <string name="title_activity_settings2">SettingsActivity2</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="onVibration">On</string>
+    <string name="offVibration">Off</string>
+    <string name="onNotification">On</string>
+    <string name="offNotification">Off</string>
+    <string name="onAd">On</string>
+    <string name="offAd">Off</string>
+    <string name="backButtonSet">Back</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="volumeText">Volume</string>
+    <string name="vibrationText">Vibration</string>
+    <string name="notificationText">Notification</string>
+    <string name="advertisingText">Advertising</string>
 </resources>
