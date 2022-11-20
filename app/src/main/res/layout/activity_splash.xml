@@ -23,33 +23,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/hangedout_name" />
 
-    <ImageView
-        android:id="@+id/splashPenImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
-        android:adjustViewBounds="true"
-        android:scaleX="1"
-        android:scaleY="1"
-        app:layout_constraintBottom_toTopOf="@+id/splashHintText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/hangedout_splashpen" />
-
     <TextView
         android:id="@+id/splashDownloadingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="501dp"
+        android:layout_marginBottom="4dp"
         android:text="Downloading resources..."
+
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/splashPenImage"
+        app:layout_constraintBottom_toTopOf="@+id/splahImagePen"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splashAppName" />
 
     <TextView
         android:id="@+id/splashHintText"
@@ -58,6 +45,7 @@
         android:layout_marginBottom="32dp"
         android:text="Hint: Use the vocals"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/splahImagePen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -67,15 +55,28 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="73dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="70dp"
         android:progress="100"
         android:progressTint="#FF5722"
         android:scaleY="3"
-        app:layout_constraintBottom_toBottomOf="@+id/splashPenImage"
-        app:layout_constraintEnd_toEndOf="@+id/splashPenImage"
-        app:layout_constraintStart_toStartOf="@+id/splashPenImage"
-        app:layout_constraintTop_toTopOf="@+id/splashPenImage" />
+        app:layout_constraintBottom_toBottomOf="@+id/splahImagePen"
+        app:layout_constraintEnd_toEndOf="@+id/splahImagePen"
+        app:layout_constraintStart_toStartOf="@+id/splahImagePen"
+        app:layout_constraintTop_toTopOf="@+id/splahImagePen" />
+
+    <ImageView
+        android:id="@+id/splahImagePen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@+id/splashHintText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splashDownloadingText"
+        app:srcCompat="@drawable/hangedout_splashpenbackgrounnd" />
 </androidx.constraintlayout.widget.ConstraintLayout>
