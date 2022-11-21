@@ -8,10 +8,14 @@
     <TextView
         android:id="@+id/ScoreListName"
         android:layout_width="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
-        tools:text="Nombre"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginTop="16dp"
+        android:textColor="#F44336"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:text="Nombre" />
 
     <TextView
         android:id="@+id/ScoreListScore"
@@ -19,6 +23,11 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="100dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#F44336"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="@+id/ScoreListName"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
