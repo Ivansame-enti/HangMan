@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    tools:context=".GameActivity.GameActivity">
 
     <TextView
         android:id="@+id/wordTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="408dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
         android:letterSpacing="0.3"
         android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/lettersUsedTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,10 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="111dp"
         android:gravity="center"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/lettersLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wordTextView"
-        tools:layout_editor_absoluteX="16dp"
         tools:text="Used Letters: A, B, C, D, E, F, G" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,6 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
@@ -48,311 +54,428 @@
             android:id="@+id/a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="A"
             android:textColor="@color/black"
-            android:textSize="24dp" />
+            android:textSize="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/b"
+            app:layout_constraintStart_toEndOf="@+id/flow"
+            tools:layout_editor_absoluteY="16dp" />
 
         <TextView
             android:id="@+id/b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="B"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/m"
+            app:layout_constraintEnd_toStartOf="@+id/c"
+            app:layout_constraintStart_toEndOf="@+id/a" />
 
         <TextView
             android:id="@+id/c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="C"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="87dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/m"
+            app:layout_constraintEnd_toStartOf="@+id/d"
+            app:layout_constraintStart_toEndOf="@+id/b" />
 
         <TextView
             android:id="@+id/d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="D"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="123dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/n"
+            app:layout_constraintEnd_toStartOf="@+id/e"
+            app:layout_constraintStart_toEndOf="@+id/c" />
 
         <TextView
             android:id="@+id/e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="E"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="159dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/o"
+            app:layout_constraintEnd_toStartOf="@+id/f"
+            app:layout_constraintStart_toEndOf="@+id/d" />
 
         <TextView
             android:id="@+id/f"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="F"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="193dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/p"
+            app:layout_constraintEnd_toStartOf="@+id/g"
+            app:layout_constraintStart_toEndOf="@+id/e" />
 
         <TextView
             android:id="@+id/g"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="G"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="226dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/q"
+            app:layout_constraintEnd_toStartOf="@+id/h"
+            app:layout_constraintStart_toEndOf="@+id/f" />
 
         <TextView
             android:id="@+id/h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="H"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="262dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/r"
+            app:layout_constraintEnd_toStartOf="@+id/i"
+            app:layout_constraintStart_toEndOf="@+id/g" />
 
         <TextView
             android:id="@+id/i"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="I"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="300dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/s"
+            app:layout_constraintEnd_toStartOf="@+id/j"
+            app:layout_constraintStart_toEndOf="@+id/h" />
 
         <TextView
             android:id="@+id/j"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="J"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="326dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/t"
+            app:layout_constraintEnd_toStartOf="@+id/k"
+            app:layout_constraintStart_toEndOf="@+id/i" />
 
         <TextView
             android:id="@+id/k"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="K"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="360dp"
-            tools:layout_editor_absoluteY="53dp" />
+            app:layout_constraintBottom_toTopOf="@+id/u"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/j" />
 
         <TextView
             android:id="@+id/l"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="L"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="18dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/v"
+            app:layout_constraintEnd_toStartOf="@+id/m" />
 
         <TextView
             android:id="@+id/m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="M"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="53dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/v"
+            app:layout_constraintEnd_toStartOf="@+id/n"
+            app:layout_constraintStart_toEndOf="@+id/l" />
 
         <TextView
             android:id="@+id/n"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="N"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="96dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/w"
+            app:layout_constraintEnd_toStartOf="@+id/o"
+            app:layout_constraintStart_toEndOf="@+id/m" />
 
         <TextView
             android:id="@+id/o"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="O"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="135dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/w"
+            app:layout_constraintEnd_toStartOf="@+id/p"
+            app:layout_constraintStart_toEndOf="@+id/n" />
 
         <TextView
             android:id="@+id/p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="P"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="173dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/x"
+            app:layout_constraintEnd_toStartOf="@+id/q"
+            app:layout_constraintStart_toEndOf="@+id/o" />
 
         <TextView
             android:id="@+id/q"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="3dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="Q"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="210dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/x"
+            app:layout_constraintEnd_toStartOf="@+id/r"
+            app:layout_constraintStart_toEndOf="@+id/p" />
 
         <TextView
             android:id="@+id/r"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="1dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="R"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="249dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/y"
+            app:layout_constraintEnd_toStartOf="@+id/s"
+            app:layout_constraintStart_toEndOf="@+id/q" />
 
         <TextView
             android:id="@+id/s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="3dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="S"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="285dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/y"
+            app:layout_constraintEnd_toStartOf="@+id/t"
+            app:layout_constraintStart_toEndOf="@+id/r" />
 
         <TextView
             android:id="@+id/t"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="2dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="T"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="322dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/z"
+            app:layout_constraintEnd_toStartOf="@+id/u"
+            app:layout_constraintStart_toEndOf="@+id/s" />
 
         <TextView
             android:id="@+id/u"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="18dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="U"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="358dp"
-            tools:layout_editor_absoluteY="122dp" />
+            app:layout_constraintBottom_toTopOf="@+id/z"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/t"
+            app:layout_constraintTop_toBottomOf="@+id/k" />
 
         <TextView
             android:id="@+id/v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="V"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="49dp"
-            tools:layout_editor_absoluteY="191dp" />
+            app:layout_constraintBottom_toTopOf="@+id/flow"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/flow" />
 
         <TextView
             android:id="@+id/w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="W"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="118dp"
-            tools:layout_editor_absoluteY="191dp" />
+            app:layout_constraintBottom_toTopOf="@+id/flow"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/flow" />
 
         <TextView
             android:id="@+id/x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="X"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="192dp"
-            tools:layout_editor_absoluteY="191dp" />
+            app:layout_constraintBottom_toTopOf="@+id/flow"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/flow" />
 
         <TextView
             android:id="@+id/y"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="Y"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="260dp"
-            tools:layout_editor_absoluteY="191dp" />
+            app:layout_constraintBottom_toTopOf="@+id/flow"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/flow"
+            app:layout_constraintTop_toBottomOf="@+id/r" />
 
         <TextView
             android:id="@+id/z"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:paddingHorizontal="10dp"
             android:text="Z"
             android:textColor="@color/black"
             android:textSize="24dp"
-            tools:layout_editor_absoluteX="328dp"
-            tools:layout_editor_absoluteY="191dp" />
+            app:layout_constraintBottom_toTopOf="@+id/flow"
+            app:layout_constraintEnd_toStartOf="@+id/flow"
+            app:layout_constraintStart_toEndOf="@+id/flow"
+            app:layout_constraintTop_toBottomOf="@+id/t" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/soga"
+        android:layout_width="215dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="170dp"
+        android:src="@drawable/hangmansticks"
+        app:layout_constraintBottom_toTopOf="@+id/lettersLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/head"
+        android:layout_width="63dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="120dp"
+        android:src="@drawable/hangman_head"
+        app:layout_constraintBottom_toTopOf="@+id/wordTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
