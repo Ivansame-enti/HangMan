@@ -64,7 +64,8 @@
             android:textSize="24dp"
             app:layout_constraintEnd_toStartOf="@+id/b"
             app:layout_constraintStart_toEndOf="@+id/flow"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            />
 
         <TextView
             android:id="@+id/b"

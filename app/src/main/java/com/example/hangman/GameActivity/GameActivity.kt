@@ -1,9 +1,18 @@
 package com.example.hangman.GameActivity
 
 import android.content.Context
+import android.graphics.Color.RED
+import android.hardware.camera2.params.RggbChannelVector.RED
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.databinding.ActivitySettingsBinding
@@ -11,18 +20,59 @@ import com.example.hangman.databinding.ActivitySettingsBinding
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
+    private val gameManager = GameManager()
+
+    private lateinit var wordTextView: TextView
+    private lateinit var lettersUsedTextView: TextView
+    private lateinit var imageView: ImageView
+    private lateinit var gameLostTextView: TextView
+    private lateinit var gameWonTextView: TextView
+    private lateinit var newGameButton: Button
+    private lateinit var lettersLayout: ConstraintLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        gameManager.startNewGame()
         super.onCreate(savedInstanceState)
+        binding.head.isVisible = false
+        binding.body.isVisible = false
+        binding.rightArm.isVisible = false
+        binding.leftArm.isVisible = false
+        binding.rightLeg.isVisible = false
+        binding.leftLeg.isVisible = false
 
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        wordTextView = binding.wordTextView
+        lettersLayout = binding.lettersLayout
 
         var gameIntent = 0;
         var volume = true;
         var vibration = true;
         var notification = true;
         var advertising = true;
+        val gameState = gameManager.startNewGame()
+
+        updateUI(gameState)
+
+        lettersLayout.children.forEach { letterView ->
+            if (letterView is TextView) {
+                letterView.setOnClickListener {
+
+                    //letterView.background =
+                    val gameState = gameManager.play((letterView).text[0])
+                    updateUI(gameState)
+                    gameIntent++
+                    //letterView.setTextColor(255,34,34);
+                    //letterView.setTextColor(255,0,0);
+                    // letterView.visibility = View.GONE //CUANDO DAS UNA LETRA, PONER QUE SE PONGA ROJO
+
+                    // letterView.setBackgroundColor(255);
+                }
+            }
+        }
+
+
 
 
         if(gameIntent == 1)
@@ -53,6 +103,26 @@ class GameActivity : AppCompatActivity() {
             advertising = sharedPref.getBoolean("advertising",true)
         }
         loadData()
+
+    }
+
+    private fun updateUI(gameState: Any) {
+        when (gameState) {
+            is GameState.Lost -> showGameLost(gameState.wordToGuess)
+            is GameState.Running -> {
+                wordTextView.text = gameState.underscoreWord
+                //lettersUsedTextView.text = "Letters used: ${gameState.lettersUsed}"
+                //imageView.setImageDrawable(ContextCompat.getDrawable(this, gameState.drawable))
+            }
+            is GameState.Won -> showGameWon(gameState.wordToGuess)
+        }
+    }
+
+    private fun showGameWon(wordToGuess: String) {
+
+    }
+
+    private fun showGameLost(wordToGuess: String) {
 
     }
 }
