@@ -16,6 +16,11 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.databinding.ActivitySettingsBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class GameActivity : AppCompatActivity() {
@@ -32,8 +37,12 @@ class GameActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        gameManager.startNewGame()
+
         super.onCreate(savedInstanceState)
+        gameManager.startNewGame()
+        binding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         binding.head.isVisible = false
         binding.body.isVisible = false
         binding.rightArm.isVisible = false
@@ -41,8 +50,7 @@ class GameActivity : AppCompatActivity() {
         binding.rightLeg.isVisible = false
         binding.leftLeg.isVisible = false
 
-        binding = ActivityGameBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
 
@@ -103,6 +111,22 @@ class GameActivity : AppCompatActivity() {
             advertising = sharedPref.getBoolean("advertising",true)
         }
         loadData()
+
+        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
+            GsonConverterFactory.create()).build()
+
+        val services = outside.create(ApiHangman::class.java)
+
+        services.createGame().enqueue(object : Callback<GameInfo> {
+            override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
+                val string :String = response.body()?.word ?: "null"
+                Toast.makeText(this@GameActivity, string, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<GameInfo>, t: Throwable) {
+                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
