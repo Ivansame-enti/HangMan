@@ -35,6 +35,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var newGameButton: Button
     private lateinit var lettersLayout: ConstraintLayout
 
+    private var gameToken: String = ""
+    private var gameWord: String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -68,8 +71,9 @@ class GameActivity : AppCompatActivity() {
                 letterView.setOnClickListener {
 
                     //letterView.background =
-                    val gameState = gameManager.play((letterView).text[0])
-                    updateUI(gameState)
+                    //val gameState = gameManager.play((letterView).text[0])
+                    //updateUI(gameState)
+                    guessLetter((letterView).text[0])
                     gameIntent++
                     //letterView.setTextColor(255,34,34);
                     //letterView.setTextColor(255,0,0);
@@ -112,22 +116,7 @@ class GameActivity : AppCompatActivity() {
         }
         loadData()
 
-        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
-            GsonConverterFactory.create()).build()
-
-        val services = outside.create(ApiHangman::class.java)
-
-        services.createGame().enqueue(object : Callback<GameInfo> {
-            override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
-                val string :String = response.body()?.word ?: "null"
-                Toast.makeText(this@GameActivity, string, Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onFailure(call: Call<GameInfo>, t: Throwable) {
-                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_SHORT).show()
-            }
-        })
-
+        startGame()
     }
 
     private fun updateUI(gameState: Any) {
@@ -140,6 +129,48 @@ class GameActivity : AppCompatActivity() {
             }
             is GameState.Won -> showGameWon(gameState.wordToGuess)
         }
+    }
+
+    private fun startGame(){
+        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
+            GsonConverterFactory.create()).build()
+
+        val services = outside.create(ApiHangman::class.java)
+
+        services.createGame().enqueue(object : Callback<GameInfo> {
+            override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
+                gameWord = response.body()?.word ?: ""
+                Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+                gameToken = response.body()?.token ?: ""
+            }
+
+            override fun onFailure(call: Call<GameInfo>, t: Throwable) {
+                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun guessLetter(letter : Char)
+    {
+        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
+            GsonConverterFactory.create()).build()
+
+        val services = outside.create(ApiHangman::class.java)
+
+        services.guessLetter(gameToken, letter.toString()).enqueue(object : Callback<GameGuessLetter>{
+            override fun onResponse(call: Call<GameGuessLetter>,response: Response<GameGuessLetter>)
+            {
+                val letterInWord : Boolean = response.body()?.correct ?: false
+                gameWord = response.body()?.word ?: "";
+                gameToken = response.body()?.token ?: ""
+                Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<GameGuessLetter>, t: Throwable)
+            {
+                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun showGameWon(wordToGuess: String) {
