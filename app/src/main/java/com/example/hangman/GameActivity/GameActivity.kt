@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
-    private val gameManager = GameManager()
+    //private val gameManager = GameManager()
 
     private lateinit var wordTextView: TextView
     private lateinit var lettersUsedTextView: TextView
@@ -37,12 +37,13 @@ class GameActivity : AppCompatActivity() {
 
     private var gameToken: String = ""
     private var gameWord: String = ""
+    var gameIntent = 0;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        gameManager.startNewGame()
+        //gameManager.startNewGame()
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -57,14 +58,14 @@ class GameActivity : AppCompatActivity() {
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
 
-        var gameIntent = 0;
+
         var volume = true;
         var vibration = true;
         var notification = true;
         var advertising = true;
-        val gameState = gameManager.startNewGame()
+        //val gameState = gameManager.startNewGame()
 
-        updateUI(gameState)
+        //updateUI(gameState)
 
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
@@ -74,7 +75,7 @@ class GameActivity : AppCompatActivity() {
                     //val gameState = gameManager.play((letterView).text[0])
                     //updateUI(gameState)
                     guessLetter((letterView).text[0])
-                    gameIntent++
+                    //gameIntent++
                     //letterView.setTextColor(255,34,34);
                     //letterView.setTextColor(255,0,0);
                     // letterView.visibility = View.GONE //CUANDO DAS UNA LETRA, PONER QUE SE PONGA ROJO
@@ -87,25 +88,7 @@ class GameActivity : AppCompatActivity() {
 
 
 
-        if(gameIntent == 1)
-            binding.head.isVisible = true;
 
-        if(gameIntent == 2)
-            binding.body.isVisible = true;
-
-        if(gameIntent == 3)
-            binding.rightArm.isVisible = true
-
-        if(gameIntent == 4)
-            binding.leftArm.isVisible = true
-
-        if(gameIntent == 5)
-            binding.rightLeg.isVisible = true
-
-        if(gameIntent == 6){
-            binding.leftLeg.isVisible = true;
-            Toast.makeText(this, "Moriste", Toast.LENGTH_SHORT).show()
-        }
 
         fun loadData(){
             val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
@@ -119,6 +102,7 @@ class GameActivity : AppCompatActivity() {
         startGame()
     }
 
+    /*
     private fun updateUI(gameState: Any) {
         when (gameState) {
             is GameState.Lost -> showGameLost(gameState.wordToGuess)
@@ -129,7 +113,7 @@ class GameActivity : AppCompatActivity() {
             }
             is GameState.Won -> showGameWon(gameState.wordToGuess)
         }
-    }
+    }*/
 
     private fun startGame(){
         val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
@@ -140,14 +124,19 @@ class GameActivity : AppCompatActivity() {
         services.createGame().enqueue(object : Callback<GameInfo> {
             override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
                 gameWord = response.body()?.word ?: ""
-                Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
                 gameToken = response.body()?.token ?: ""
+                showWord()
             }
 
             override fun onFailure(call: Call<GameInfo>, t: Throwable) {
                 Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun showWord(){
+        binding.wordTextView.text = gameWord
     }
 
     private fun guessLetter(letter : Char)
@@ -163,7 +152,15 @@ class GameActivity : AppCompatActivity() {
                 val letterInWord : Boolean = response.body()?.correct ?: false
                 gameWord = response.body()?.word ?: "";
                 gameToken = response.body()?.token ?: ""
-                Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+                if(letterInWord) {
+                    showWord()
+                    checkWin()
+                } else {
+                    gameIntent++
+                    Toast.makeText(this@GameActivity, gameIntent.toString(), Toast.LENGTH_LONG).show()
+                    checkLose()
+                }
             }
 
             override fun onFailure(call: Call<GameGuessLetter>, t: Throwable)
@@ -171,6 +168,24 @@ class GameActivity : AppCompatActivity() {
                 Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun checkWin(){
+        if(!gameWord.contains("_")) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
+    }
+
+    private fun checkLose(){
+        when (gameIntent) {
+            1 -> binding.head.isVisible = true;
+            2 -> binding.body.isVisible = true;
+            3 -> binding.rightArm.isVisible = true
+            4 -> binding.leftArm.isVisible = true
+            5 -> binding.rightLeg.isVisible = true
+            6 -> {
+                binding.leftLeg.isVisible = true;
+                Toast.makeText(this, "Moriste", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showGameWon(wordToGuess: String) {
