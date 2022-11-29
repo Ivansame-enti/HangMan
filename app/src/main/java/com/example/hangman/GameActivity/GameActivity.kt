@@ -2,24 +2,20 @@ package com.example.hangman.GameActivity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color.RED
-import android.hardware.camera2.params.RggbChannelVector.RED
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.os.Handler
+import android.os.Looper
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import com.example.hangman.MainActivity
 import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
-import com.example.hangman.databinding.ActivitySettingsBinding
+import com.example.hangman.scores.ScoreActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
+
+    //Constantes
+    private val TIME_TO_NEXT_ACTIVITY: Long = 2000
 
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
@@ -161,8 +160,12 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun checkWin(){
-        //if(!gameWord.contains("_")) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
-        if(gameWord == gameSolution) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
+        if(gameWord == gameSolution){
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = Intent(this@GameActivity, ScoreActivity::class.java)
+                startActivity(intent)
+            }, TIME_TO_NEXT_ACTIVITY)
+        }
     }
 
     private fun checkLose(){
@@ -173,8 +176,13 @@ class GameActivity : AppCompatActivity() {
             4 -> binding.leftArm.isVisible = true
             5 -> binding.rightLeg.isVisible = true
             6 -> {
-                binding.leftLeg.isVisible = true;
-                Toast.makeText(this, "Moriste", Toast.LENGTH_SHORT).show()
+                binding.leftLeg.isVisible = true
+                gameWord = gameSolution
+                showWord()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this@GameActivity, ScoreActivity::class.java)
+                    startActivity(intent)
+                }, TIME_TO_NEXT_ACTIVITY)
             }
         }
     }
