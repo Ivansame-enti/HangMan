@@ -1,6 +1,7 @@
 package com.example.hangman.GameActivity
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color.RED
 import android.hardware.camera2.params.RggbChannelVector.RED
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import com.example.hangman.MainActivity
+import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.databinding.ActivitySettingsBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,7 +59,7 @@ class GameActivity : AppCompatActivity() {
         binding.rightLeg.isVisible = false
         binding.leftLeg.isVisible = false
 
-
+        supportActionBar?.hide();
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
 
@@ -68,6 +71,11 @@ class GameActivity : AppCompatActivity() {
         //val gameState = gameManager.startNewGame()
 
         //updateUI(gameState)
+        binding.layout.settingsButton.setOnClickListener{
+            val intent = Intent(this@GameActivity, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
 
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {

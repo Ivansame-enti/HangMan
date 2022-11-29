@@ -28,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
         var notificationFlag = true
         var advertisingFlag = true
         var id = 1
-
+        supportActionBar?.hide();
 
         fun saveData(){
             val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)

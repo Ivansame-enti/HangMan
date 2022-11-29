@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import com.example.hangman.GameActivity.GameActivity
 import com.example.hangman.loginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -34,15 +35,14 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if(username.isEmpty() && password.isEmpty() && fireBaseAuth.getCurrentUser() != null){ //Cargamos el juego con el usuario ya logueado
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                val intent = Intent(this@LoginActivity, GameActivity::class.java)
                 startActivity(intent)
-
                 finish()
             }
 
             if(username.isNotEmpty() && password.isNotEmpty()) {  //Cargamos el juego con el nuevo login
                 fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    val intent = Intent(this@LoginActivity, GameActivity::class.java)
                     startActivity(intent)
 
                     finish()
@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
             fireBaseAuth.signInAnonymously()
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        val intent = Intent(this@LoginActivity, GameActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
