@@ -2,7 +2,9 @@ package com.example.hangman.gameActivity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
@@ -29,10 +31,10 @@ class GameActivity : AppCompatActivity() {
 
     //Constantes
     private val TIME_TO_NEXT_ACTIVITY: Long = 2000
-
+    private lateinit var timer: CountDownTimer
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
-
+    private lateinit var TimerLayout: TextView
     private lateinit var outside: Retrofit
     private lateinit var services: ApiHangman
 
@@ -64,9 +66,24 @@ class GameActivity : AppCompatActivity() {
         binding.leftLeg.isVisible = false
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
-
+        TimerLayout = binding.TimerLayout
         supportActionBar?.hide();
 
+        timer = object: CountDownTimer(60000,1){
+            override fun onTick(remaining: Long) {
+
+                if(remaining<10000){
+                    TimerLayout.text = (remaining/1000).toString()
+                    TimerLayout.setTextColor(Color.RED)
+                }else{
+                    TimerLayout.text = (remaining/1000).toString()
+                }
+            }
+
+            override fun onFinish() {
+                TimerLayout.text ="TIME OVER"
+            }
+        }
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
@@ -157,6 +174,15 @@ class GameActivity : AppCompatActivity() {
                 Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_LONG).show()
             }
         })
+    }
+    override fun onStart() {
+        super.onStart()
+        timer.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        timer.cancel()
     }
 
     private fun checkWin(){
