@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.example.hangman.MainActivity
+import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.databinding.ActivitySettingsBinding
@@ -29,18 +30,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
-    //private val gameManager = GameManager()
 
     private lateinit var wordTextView: TextView
-    private lateinit var lettersUsedTextView: TextView
-    private lateinit var imageView: ImageView
-    private lateinit var gameLostTextView: TextView
-    private lateinit var gameWonTextView: TextView
-    private lateinit var newGameButton: Button
     private lateinit var lettersLayout: ConstraintLayout
+
+    private lateinit var outside: Retrofit
+    private lateinit var services: ApiHangman
+
+    private var volume = true;
+    private var vibration = true;
+    private var notification = true;
+    private var advertising = true;
 
     private var gameToken: String = ""
     private var gameWord: String = ""
+    private var gameSolution: String = ""
     var gameIntent = 0;
 
     private lateinit var firestore: FirebaseFirestore
@@ -48,95 +52,66 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        //gameManager.startNewGame()
+
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Accedemos a elementos del layout
         binding.head.isVisible = false
         binding.body.isVisible = false
         binding.rightArm.isVisible = false
         binding.leftArm.isVisible = false
         binding.rightLeg.isVisible = false
         binding.leftLeg.isVisible = false
-
-        supportActionBar?.hide();
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
 
+        supportActionBar?.hide();
 
-        var volume = true;
-        var vibration = true;
-        var notification = true;
-        var advertising = true;
-        //val gameState = gameManager.startNewGame()
-
-        //updateUI(gameState)
+        //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
 
-
+        //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
-
-                    //letterView.background =
-                    //val gameState = gameManager.play((letterView).text[0])
-                    //updateUI(gameState)
-                    guessLetter((letterView).text[0])
-                    //gameIntent++
-                    //letterView.setTextColor(255,34,34);
-                    //letterView.setTextColor(255,0,0);
-                    // letterView.visibility = View.GONE //CUANDO DAS UNA LETRA, PONER QUE SE PONGA ROJO
-
-                    // letterView.setBackgroundColor(255);
+                    guessLetter(letterView)
                 }
             }
         }
 
+        //Variables para API hangman
+        outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(GsonConverterFactory.create()).build()
+        services = outside.create(ApiHangman::class.java)
 
+        loadData() //Carga las settings
 
-
-
-
-        fun loadData(){
-            val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-            volume = sharedPref.getBoolean("volume",true)
-            vibration = sharedPref.getBoolean("vibration",true)
-            notification = sharedPref.getBoolean("notification",true)
-            advertising = sharedPref.getBoolean("advertising",true)
-        }
-        loadData()
-
-        startGame()
+        startGame() //Empieza la partida
     }
 
-    /*
-    private fun updateUI(gameState: Any) {
-        when (gameState) {
-            is GameState.Lost -> showGameLost(gameState.wordToGuess)
-            is GameState.Running -> {
-                wordTextView.text = gameState.underscoreWord
-                //lettersUsedTextView.text = "Letters used: ${gameState.lettersUsed}"
-                //imageView.setImageDrawable(ContextCompat.getDrawable(this, gameState.drawable))
-            }
-            is GameState.Won -> showGameWon(gameState.wordToGuess)
-        }
-    }*/
+    private fun loadData(){
+        val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        volume = sharedPref.getBoolean("volume",true)
+        vibration = sharedPref.getBoolean("vibration",true)
+        notification = sharedPref.getBoolean("notification",true)
+        advertising = sharedPref.getBoolean("advertising",true)
+    }
+
+
+    private fun showWord(){
+        binding.wordTextView.text = gameWord
+    }
 
     private fun startGame(){
-        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
-            GsonConverterFactory.create()).build()
-
-        val services = outside.create(ApiHangman::class.java)
-
         services.createGame().enqueue(object : Callback<GameInfo> {
             override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
                 gameWord = response.body()?.word ?: ""
-                //Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
                 gameToken = response.body()?.token ?: ""
                 showWord()
+                getWord()
             }
 
             override fun onFailure(call: Call<GameInfo>, t: Throwable) {
@@ -145,30 +120,35 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
-    private fun showWord(){
-        binding.wordTextView.text = gameWord
+    private fun getWord(){
+        services.getSolution(gameToken).enqueue(object : Callback<GameSolution> {
+            override fun onResponse(call: Call<GameSolution>, response: Response<GameSolution>) {
+                gameSolution = response.body()?.solution ?: ""
+                Toast.makeText(this@GameActivity, gameSolution, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<GameSolution>, t: Throwable) {
+                Toast.makeText(this@GameActivity, "Error at getting solution", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun guessLetter(letter : Char)
+    private fun guessLetter(letter : TextView)
     {
-        val outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
-            GsonConverterFactory.create()).build()
-
-        val services = outside.create(ApiHangman::class.java)
-
-        services.guessLetter(gameToken, letter.toString()).enqueue(object : Callback<GameGuessLetter>{
+        services.guessLetter(gameToken, letter.text[0].toString()).enqueue(object : Callback<GameGuessLetter>{
             override fun onResponse(call: Call<GameGuessLetter>,response: Response<GameGuessLetter>)
             {
                 val letterInWord : Boolean = response.body()?.correct ?: false
                 gameWord = response.body()?.word ?: "";
                 gameToken = response.body()?.token ?: ""
-                //Toast.makeText(this@GameActivity, gameWord, Toast.LENGTH_SHORT).show()
+
                 if(letterInWord) {
+                    letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
                     showWord()
                     checkWin()
                 } else {
+                    letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
                     gameIntent++
-                    Toast.makeText(this@GameActivity, gameIntent.toString(), Toast.LENGTH_LONG).show()
                     checkLose()
                 }
             }
@@ -181,7 +161,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun checkWin(){
-        if(!gameWord.contains("_")) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
+        //if(!gameWord.contains("_")) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
+        if(gameWord == gameSolution) Toast.makeText(this@GameActivity, "Ganaste man", Toast.LENGTH_LONG).show()
     }
 
     private fun checkLose(){
@@ -196,13 +177,5 @@ class GameActivity : AppCompatActivity() {
                 Toast.makeText(this, "Moriste", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun showGameWon(wordToGuess: String) {
-
-    }
-
-    private fun showGameLost(wordToGuess: String) {
-
     }
 }

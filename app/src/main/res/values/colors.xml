@@ -11,4 +11,8 @@
     <color name="OnColorTrue">#F44336</color>
     <color name="OnColorFalse">#66F34336</color>
     <color name="OffColorFalse">#6626619B</color>
+    <color name="letters_normal2">#808E8E8E</color>
+    <color name="letters_normal">#80FBE700</color>
+    <color name="letters_wrong">#80F44336</color>
+    <color name="letters_right">#8022BD36</color>
 </resources>
