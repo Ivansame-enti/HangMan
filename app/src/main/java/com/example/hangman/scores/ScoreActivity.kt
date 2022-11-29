@@ -18,9 +18,6 @@ class ScoreActivity : AppCompatActivity() {
         binding = ActivityScoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecycledView()
-
-
-
     }
 
 

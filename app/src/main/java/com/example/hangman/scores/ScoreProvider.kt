@@ -4,7 +4,7 @@ class ScoreProvider {
 
     companion object{
 
-        val scoreListDef = listOf<ScoreList>( //CREO QUE YA DETECTA QUE ES DE CLASE SCORELIST SIN PONERSELO
+        val scoreListDef = listOf<ScoreList>(
             ScoreList(
                 "ivansales@gmail.com",
                 1000

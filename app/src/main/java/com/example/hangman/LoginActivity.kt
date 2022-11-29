@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import com.example.hangman.GameActivity.GameActivity
+import com.example.hangman.gameActivity.GameActivity
 import com.example.hangman.loginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth

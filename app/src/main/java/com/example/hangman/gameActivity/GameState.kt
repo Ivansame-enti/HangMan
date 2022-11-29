@@ -1,4 +1,4 @@
-package com.example.hangman.GameActivity
+package com.example.hangman.gameActivity
 
 sealed class GameState {
     class Running(

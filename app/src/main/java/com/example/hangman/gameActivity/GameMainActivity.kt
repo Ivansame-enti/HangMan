@@ -1,4 +1,4 @@
-package com.example.hangman.GameActivity
+package com.example.hangman.gameActivity
 
 import android.content.Intent
 import android.os.Bundle

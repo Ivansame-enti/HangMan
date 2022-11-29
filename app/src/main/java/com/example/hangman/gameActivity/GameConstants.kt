@@ -1,4 +1,4 @@
-package com.example.hangman.GameActivity
+package com.example.hangman.gameActivity
 
 object GameConstants {
     val words = listOf(

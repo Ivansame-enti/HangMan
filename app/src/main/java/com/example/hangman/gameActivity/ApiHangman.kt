@@ -1,4 +1,4 @@
-package com.example.hangman.GameActivity
+package com.example.hangman.gameActivity
 
 import retrofit2.Call
 import retrofit2.http.GET
