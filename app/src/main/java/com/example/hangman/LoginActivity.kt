@@ -9,10 +9,12 @@ import android.widget.Toast
 import com.example.hangman.loginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var fireBaseAuth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         fireBaseAuth = FirebaseAuth.getInstance()
-
+        firestore = FirebaseFirestore.getInstance()
         if (fireBaseAuth.getCurrentUser() != null) {
             binding.LogedLoginTextView.visibility= View.VISIBLE
             binding.emailLoginTextView.visibility= View.VISIBLE

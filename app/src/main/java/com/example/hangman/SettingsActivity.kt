@@ -7,14 +7,18 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.hangman.databinding.ActivitySettingsBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var fireBaseAuth: FirebaseAuth
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        fireBaseAuth = FirebaseAuth.getInstance()
+        val firestore = FirebaseFirestore.getInstance()
         var volume = true;
         var vibration = true;
         var notification = true;
@@ -23,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         var vibrationFlag = true;
         var notificationFlag = true
         var advertisingFlag = true
+        var id = 1
 
 
         fun saveData(){
@@ -34,6 +39,21 @@ class SettingsActivity : AppCompatActivity() {
                 putBoolean("notification",notificationFlag)
                 putBoolean("advertising",advertisingFlag)
             }.apply()
+            val settingsData = hashMapOf(
+                "volume" to volumeFlag,
+                "vibration" to vibrationFlag,
+                "notification" to notificationFlag,
+                "advertising" to advertisingFlag
+            )
+            firestore.collection("SettingsValue")
+                .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+                .set(settingsData)
+                .addOnSuccessListener { result ->
+                    Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
+                }
         }
         fun loadData(){
             val sharedPref = getSharedPreferences("prefs",Context.MODE_PRIVATE)
@@ -146,7 +166,8 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.backButton.setOnClickListener{
             saveData()
-            Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
+
+            //Toast.makeText(this, volume.toString(), Toast.LENGTH_SHORT).show()
         }
 
     }

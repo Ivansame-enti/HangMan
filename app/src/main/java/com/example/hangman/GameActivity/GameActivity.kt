@@ -16,6 +16,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.databinding.ActivitySettingsBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +40,7 @@ class GameActivity : AppCompatActivity() {
     private var gameWord: String = ""
     var gameIntent = 0;
 
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
