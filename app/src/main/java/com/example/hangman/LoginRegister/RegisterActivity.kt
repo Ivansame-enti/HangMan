@@ -1,4 +1,4 @@
-package com.example.hangman.loginRegister
+package com.example.hangman.LoginRegister
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -32,17 +32,13 @@ class RegisterActivity : AppCompatActivity() {
                         fireBaseAuth.createUserWithEmailAndPassword(username, password)
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
-                                    val user = fireBaseAuth.currentUser
-                                    //updateUI(user)
-                                    val intent =
-                                        Intent(this@RegisterActivity, LoginActivity::class.java)
+                                    val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                                     startActivity(intent)
                                 } else {
                                     Toast.makeText(
                                         baseContext, "Authentication failed.",
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    //updateUI(null)
                                 }
                             }
                     } else Toast.makeText(

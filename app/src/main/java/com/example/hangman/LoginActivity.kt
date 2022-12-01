@@ -4,11 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
-import android.view.View
 import android.widget.Toast
 import com.example.hangman.gameActivity.GameActivity
-import com.example.hangman.loginRegister.RegisterActivity
 import com.example.hangman.databinding.ActivityLoginBinding
+import com.example.hangman.LoginRegister.PlayActivity
+import com.example.hangman.LoginRegister.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -25,27 +25,21 @@ class LoginActivity : AppCompatActivity() {
 
         fireBaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        if (fireBaseAuth.getCurrentUser() != null) {
-            binding.LogedLoginTextView.visibility= View.VISIBLE
-            binding.emailLoginTextView.visibility= View.VISIBLE
-            binding.emailLoginTextView.text = fireBaseAuth.getCurrentUser()?.email ?: "null"
+
+        if (fireBaseAuth.getCurrentUser() != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
+            val intent = Intent(this@LoginActivity, PlayActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
-            if(username.isEmpty() && password.isEmpty() && fireBaseAuth.getCurrentUser() != null){ //Cargamos el juego con el usuario ya logueado
-                val intent = Intent(this@LoginActivity, GameActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
 
             if(username.isNotEmpty() && password.isNotEmpty()) {  //Cargamos el juego con el nuevo login
                 fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, GameActivity::class.java)
                     startActivity(intent)
-
-                    finish()
 
                 }.addOnFailureListener {
                     Toast.makeText(this, "Wrong username or password ", Toast.LENGTH_SHORT).show()
@@ -64,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val intent = Intent(this@LoginActivity, GameActivity::class.java)
                         startActivity(intent)
-                        finish()
                     } else {
                         Toast.makeText(this, "Error ", Toast.LENGTH_SHORT).show()
                     }
@@ -78,6 +71,16 @@ class LoginActivity : AppCompatActivity() {
                     binding.userInput.error = "Invalid username"
                 else binding.userInput.error = null
             }
+        }
+    }
+
+    override fun onResume() { //Cuando volvemos despues de darle a atras
+        super.onResume()
+        if (fireBaseAuth.getCurrentUser() != null) {
+            fireBaseAuth = FirebaseAuth.getInstance()
+            val intent = Intent(this@LoginActivity, PlayActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

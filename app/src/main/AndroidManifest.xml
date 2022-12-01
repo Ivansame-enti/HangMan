@@ -15,7 +15,13 @@
         android:theme="@style/Theme.HangMan"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".LoginRegister.PlayActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".splashScreen.SplashActivity"
             android:exported="true">
@@ -29,17 +35,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".gameActivity.GameActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:exported="true">
@@ -47,9 +49,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name=".loginRegister.RegisterActivity"
+            android:name=".LoginRegister.RegisterActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -76,22 +77,16 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".scores.ScoreActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

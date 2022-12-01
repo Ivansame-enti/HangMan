@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/hangedout_login"
-    tools:context=".loginRegister.RegisterActivity">
+    tools:context=".LoginRegister.RegisterActivity">
 
     <ImageView
         android:id="@+id/nameAppImage"
