@@ -19,10 +19,9 @@ class PlayActivity : AppCompatActivity() {
 
         fireBaseAuth = FirebaseAuth.getInstance()
 
-        val email: String = fireBaseAuth.getCurrentUser()?.email ?: "Anonymous"
+        val email: String = fireBaseAuth.currentUser?.email ?: "Anonymous"
 
-        if(email.isEmpty()) binding.emailLoginTextView.text = "Anonymous"
-        else binding.emailLoginTextView.text = email
+        binding.emailLoginTextView.text = email
 
         binding.playButton.setOnClickListener{
             val intent = Intent(this@PlayActivity, GameActivity::class.java)

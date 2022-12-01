@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         fireBaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        if (fireBaseAuth.getCurrentUser() != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
+        if (fireBaseAuth.currentUser != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
             val intent = Intent(this@LoginActivity, PlayActivity::class.java)
             startActivity(intent)
             finish()
@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
-        binding.userInput.setOnFocusChangeListener { view, b ->
+        binding.userInput.setOnFocusChangeListener { _, b ->
             if(!b){ //Cuando perdemos el focus
                 val username = binding.userInput.text.toString()
                 if(!Patterns.EMAIL_ADDRESS.matcher(username).matches())
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onResume() { //Cuando volvemos despues de darle a atras
         super.onResume()
-        if (fireBaseAuth.getCurrentUser() != null) {
+        if (fireBaseAuth.currentUser != null) {
             fireBaseAuth = FirebaseAuth.getInstance()
             val intent = Intent(this@LoginActivity, PlayActivity::class.java)
             startActivity(intent)

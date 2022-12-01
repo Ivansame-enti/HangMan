@@ -34,11 +34,6 @@ class RegisterActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                                     startActivity(intent)
-                                } else {
-                                    Toast.makeText(
-                                        baseContext, "Authentication failed.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 }
                             }
                     } else Toast.makeText(
@@ -55,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.userInput.setOnFocusChangeListener { view, b ->
+        binding.userInput.setOnFocusChangeListener { _, b ->
             if(!b){ //Cuando perdemos el focus
                 val username = binding.userInput.text.toString()
                 if(!Patterns.EMAIL_ADDRESS.matcher(username).matches())
