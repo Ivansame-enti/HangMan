@@ -31,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.hide();
 
         fun saveData(){
-            val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+            val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.apply(){
                 putBoolean("volume",volumeFlag)
@@ -56,7 +56,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
         }
         fun loadData(){
-            val sharedPref = getSharedPreferences("prefs",Context.MODE_PRIVATE)
+            val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null",Context.MODE_PRIVATE)
             volume = sharedPref.getBoolean("volume",true)
             vibration = sharedPref.getBoolean("vibration",true)
             notification = sharedPref.getBoolean("notification",true)
@@ -192,5 +192,5 @@ class SettingsActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener{
             saveData()
         }
-    }
+    }//AQUI ACABA
 }

@@ -1,5 +1,6 @@
 package com.example.hangman
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -58,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         val intent = Intent(this@LoginActivity, GameActivity::class.java)
+                        createNewUserSettings()
                         startActivity(intent)
                     } else {
                         Toast.makeText(this, "Error ", Toast.LENGTH_SHORT).show()
@@ -85,6 +87,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     fun createNewUserSettings(){
+        val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.apply(){
+            putBoolean("volume",true)
+            putBoolean("vibration",true)
+            putBoolean("notification",true)
+            putBoolean("advertising",true)
+        }.apply()
         val settingsData = hashMapOf(
             "volume" to true,
             "vibration" to true,
