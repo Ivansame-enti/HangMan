@@ -8,7 +8,6 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -19,39 +18,33 @@ import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.scores.ScoreActivity
 import com.google.firebase.firestore.FirebaseFirestore
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
 
     //Constantes
-    private val TIME_TO_NEXT_ACTIVITY: Long = 2000
+    private val TIME_TO_NEXT_ACTIVITY: Long = 1000
+
+    //Variables
     private lateinit var timer: CountDownTimer
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
     private lateinit var TimerLayout: TextView
-    private lateinit var outside: Retrofit
-    private lateinit var services: ApiHangman
 
-    private var volume = true;
-    private var vibration = true;
-    private var notification = true;
-    private var advertising = true;
+    private var volume = true
+    private var vibration = true
+    private var notification = true
+    private var advertising = true
 
-    private var gameToken: String = ""
     private var gameWord: String = ""
     private var gameSolution: String = ""
-    var gameIntent = 0;
+    var gameIntent = 0
 
     private lateinit var firestore: FirebaseFirestore
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private val gameManager = GameManager()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityGameBinding.inflate(layoutInflater)
@@ -67,8 +60,9 @@ class GameActivity : AppCompatActivity() {
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         TimerLayout = binding.TimerLayout
-        supportActionBar?.hide();
+        supportActionBar?.hide()
 
+        //Cuenta atras
         timer = object: CountDownTimer(60000,1){
             override fun onTick(remaining: Long) {
 
@@ -81,31 +75,40 @@ class GameActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                TimerLayout.text ="TIME OVER"
+                TimerLayout.text =getString(R.string.end_time)
             }
         }
+
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
 
+        //Api hangman
+        gameWord = gameManager.startGame() //Empieza la partida
+        gameSolution = gameManager.getSolution() //Obtiene la solucion
+        showWord() //Muestra la palabra
+
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
-                    guessLetter(letterView)
+                    if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
+                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
+                        gameWord = gameManager.getWord()
+                        showWord()
+                        checkWin()
+                    } else { //La letra no esta en la palabra
+                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
+                        gameIntent++
+                        checkLose()
+                    }
                 }
             }
         }
 
-        //Variables para API hangman
-        outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(GsonConverterFactory.create()).build()
-        services = outside.create(ApiHangman::class.java)
-
         loadData() //Carga las settings
-
-        startGame() //Empieza la partida
     }
 
     private fun loadData(){
@@ -116,65 +119,10 @@ class GameActivity : AppCompatActivity() {
         advertising = sharedPref.getBoolean("advertising",true)
     }
 
-
     private fun showWord(){
         binding.wordTextView.text = gameWord
     }
 
-    private fun startGame(){
-        services.createGame().enqueue(object : Callback<GameInfo> {
-            override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
-                gameWord = response.body()?.word ?: ""
-                gameToken = response.body()?.token ?: ""
-                showWord()
-                getWord()
-            }
-
-            override fun onFailure(call: Call<GameInfo>, t: Throwable) {
-                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun getWord(){
-        services.getSolution(gameToken).enqueue(object : Callback<GameSolution> {
-            override fun onResponse(call: Call<GameSolution>, response: Response<GameSolution>) {
-                gameSolution = response.body()?.solution ?: ""
-                Toast.makeText(this@GameActivity, gameSolution, Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onFailure(call: Call<GameSolution>, t: Throwable) {
-                Toast.makeText(this@GameActivity, "Error at getting solution", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun guessLetter(letter : TextView)
-    {
-        services.guessLetter(gameToken, letter.text[0].toString()).enqueue(object : Callback<GameGuessLetter>{
-            override fun onResponse(call: Call<GameGuessLetter>,response: Response<GameGuessLetter>)
-            {
-                val letterInWord : Boolean = response.body()?.correct ?: false
-                gameWord = response.body()?.word ?: "";
-                gameToken = response.body()?.token ?: ""
-
-                if(letterInWord) {
-                    letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                    showWord()
-                    checkWin()
-                } else {
-                    letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
-                    gameIntent++
-                    checkLose()
-                }
-            }
-
-            override fun onFailure(call: Call<GameGuessLetter>, t: Throwable)
-            {
-                Toast.makeText(this@GameActivity, "Error on API", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
     override fun onStart() {
         super.onStart()
         timer.start()
@@ -197,8 +145,8 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkLose(){
         when (gameIntent) {
-            1 -> binding.head.isVisible = true;
-            2 -> binding.body.isVisible = true;
+            1 -> binding.head.isVisible = true
+            2 -> binding.body.isVisible = true
             3 -> binding.rightArm.isVisible = true
             4 -> binding.leftArm.isVisible = true
             5 -> binding.rightLeg.isVisible = true

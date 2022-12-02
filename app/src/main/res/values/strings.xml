@@ -41,4 +41,6 @@
     <string name="vibrationText">Vibration</string>
     <string name="notificationText">Notification</string>
     <string name="advertisingText">Advertising</string>
+    <string name="anon">Anonymous</string>
+    <string name="end_time">TIME OVER</string>
 </resources>

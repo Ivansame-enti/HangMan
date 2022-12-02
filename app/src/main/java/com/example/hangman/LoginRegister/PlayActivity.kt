@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.hangman.LoginActivity
+import com.example.hangman.R
 import com.example.hangman.databinding.ActivityPlayBinding
 import com.example.hangman.gameActivity.GameActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,8 @@ class PlayActivity : AppCompatActivity() {
 
         val email: String = fireBaseAuth.currentUser?.email ?: "Anonymous"
 
-        binding.emailLoginTextView.text = email
+        if(email.isEmpty()) binding.emailLoginTextView.text = getString(R.string.anon)
+        else binding.emailLoginTextView.text = email
 
         binding.playButton.setOnClickListener{
             val intent = Intent(this@PlayActivity, GameActivity::class.java)
