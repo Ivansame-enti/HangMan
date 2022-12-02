@@ -190,6 +190,7 @@ class GameActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent = Intent(this@GameActivity, ScoreActivity::class.java)
                 startActivity(intent)
+                finish()
             }, TIME_TO_NEXT_ACTIVITY)
         }
     }
@@ -208,6 +209,7 @@ class GameActivity : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this@GameActivity, ScoreActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }, TIME_TO_NEXT_ACTIVITY)
             }
         }
