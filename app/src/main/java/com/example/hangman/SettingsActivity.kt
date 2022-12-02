@@ -27,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         var vibrationFlag = true;
         var notificationFlag = true
         var advertisingFlag = true
+        var currentUser = fireBaseAuth.getCurrentUser()?.uid ?: "null"
         supportActionBar?.hide();
 
         fun saveData(){
@@ -45,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
                 "advertising" to advertisingFlag
             )
             firestore.collection("SettingsValue")
-                .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+                .document(currentUser)
                 .set(settingsData)
                 .addOnSuccessListener { result ->
                     Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
@@ -61,126 +62,133 @@ class SettingsActivity : AppCompatActivity() {
             notification = sharedPref.getBoolean("notification",true)
             advertising = sharedPref.getBoolean("advertising",true)
         }
+        //BOTONES DE VOLUMEN
+        fun volumeController(volumeC: Boolean) {
+            volumeFlag = volumeC
+            if(volumeFlag){
+                binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorFalse)
+            }else if(!volumeFlag){
+                binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+            }
+            binding.onVolume.setOnClickListener{
+                if(!volumeFlag){
+                    binding.offVolume.backgroundTintList= getColorStateList(R.color.OffColorFalse)
+                    binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                    volumeFlag = true;
+                }
+            }
+            binding.offVolume.setOnClickListener{
+                if(volumeFlag){
+                    binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                    binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+                    volumeFlag = false;
+                }
+            }
+        }
+        //BOTONES DE VIBRACION
+        fun vibrationController(vibrationC : Boolean){
+            vibrationFlag = vibrationC
+            if(vibrationFlag){
+                binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorFalse)
+            }else if(!vibrationFlag){
+                binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+            }
+            binding.onVibration.setOnClickListener{
+                if(!vibrationFlag){
+                    binding.offVibration.backgroundTintList= getColorStateList(R.color.OffColorFalse)
+                    binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                    vibrationFlag = true;
+                }
+            }
+            binding.offVibration.setOnClickListener{
+                if(vibrationFlag){
+                    binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                    binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+                    vibrationFlag = false;
+                }
+            }
+        }
+        //BOTONES DE NOTIFICACION
+        fun notificationController(notificationC : Boolean){
+            notificationFlag = notificationC
+            if(notificationFlag){
+                binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorFalse)
+            }else if(!notificationFlag){
+                binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+            }
+            binding.onNotification.setOnClickListener{
+                if(!notificationFlag){
+                    binding.offNotification.backgroundTintList= getColorStateList(R.color.OffColorFalse)
+                    binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                    notificationFlag = true;
+                }
+            }
+            binding.offNotification.setOnClickListener{
+                if(notificationFlag){
+                    binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                    binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+                    notificationFlag = false;
+                }
+            }
+        }
+        //BOTONES DE ANUNCIOS
+        fun advertisingController(advertisingC : Boolean){
+            advertisingFlag = advertisingC
+            if(advertisingFlag){
+                binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorFalse)
+            }else if(!advertisingFlag){
+                binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+            }
+            binding.onAdvertising.setOnClickListener{
+                if(!advertisingFlag){
+                    binding.offAdvertising.backgroundTintList= getColorStateList(R.color.OffColorFalse)
+                    binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
+                    advertisingFlag = true;
+                }
+            }
+            binding.offAdvertising.setOnClickListener{
+                if(advertisingFlag) {
+                    binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
+                    binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
+                    advertisingFlag = false;
+                }
+            }
+        }
         fun loadFireStorm(){
-            //val addOnFailureListener = firestore.collection("SettingsValue")
-                //.document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
-            var addOnFailureListener = firestore.collection("SettingsValue")
-                    .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
-                .get()
+            var settingsValors = firestore.collection("SettingsValue")
+                    .document(currentUser)
+            settingsValors.get()
                 .addOnSuccessListener { result ->
                         volume = result["volume"] as Boolean
                         vibration = result["vibration"] as Boolean
                         notification = result["notification"] as Boolean
                         advertising = (result["advertising"] as Boolean)
-
-                    //Toast.makeText(this, "Consulta exitosa", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this, volume.toString(), Toast.LENGTH_SHORT).show()
+                    volumeController(volume);
+                    vibrationController(vibration)
+                    notificationController(notification)
+                    advertisingController(advertising)
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Consulta fallada", Toast.LENGTH_SHORT).show()
                 }
         }
-        //loadData()
+        loadData()
         loadFireStorm()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-        //binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-        //binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-        binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-        //BOTONES DE VOLUMEN
-        volumeFlag = volume
-        if(volumeFlag){
-            binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-            binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-        }else if(!volumeFlag){
-            binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-            binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-        }
-        binding.onVolume.setOnClickListener{
-            if(!volumeFlag){
-                binding.offVolume.backgroundTintList= getColorStateList(R.color.OffColorFalse)
-                binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                volumeFlag = true;
-            }
-        }
-        binding.offVolume.setOnClickListener{
-            if(volumeFlag){
-                binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-                binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                volumeFlag = false;
-            }
-        }
-        //BOTONES DE VIBRACION
-        vibrationFlag = vibration
-        if(vibrationFlag){
-            binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-            binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-        }else if(!vibrationFlag){
-            binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-            binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-        }
-        binding.onVibration.setOnClickListener{
-            if(!vibrationFlag){
-                binding.offVibration.backgroundTintList= getColorStateList(R.color.OffColorFalse)
-                binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                vibrationFlag = true;
-            }
-        }
-        binding.offVibration.setOnClickListener{
-            if(vibrationFlag){
-                binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-                binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                vibrationFlag = false;
-            }
-        }
-        //BOTONES DE NOTIFICACION
-        notificationFlag = notification
-        if(notificationFlag){
-            binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-            binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-        }else if(!notificationFlag){
-            binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-            binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-        }
-        binding.onNotification.setOnClickListener{
-            if(!notificationFlag){
-                binding.offNotification.backgroundTintList= getColorStateList(R.color.OffColorFalse)
-                binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                notificationFlag = true;
-            }
-        }
-        binding.offNotification.setOnClickListener{
-            if(notificationFlag){
-                binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-                binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                notificationFlag = false;
-            }
-        }
-        //BOTONES DE ANUNCIOS
-        advertisingFlag = advertising
-        if(advertisingFlag){
-            binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-            binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-        }else if(!advertisingFlag){
-            binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-            binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-        }
-        binding.onAdvertising.setOnClickListener{
-            if(!advertisingFlag){
-                binding.offAdvertising.backgroundTintList= getColorStateList(R.color.OffColorFalse)
-                binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                advertisingFlag = true;
-            }
-        }
-        binding.offAdvertising.setOnClickListener{
-            if(advertisingFlag) {
-                binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
-                binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                advertisingFlag = false;
-            }
-        }
+        //Aplicamos funciones de botones
+        volumeController(volume)
+        vibrationController(vibration)
+        notificationController(notification)
+        advertisingController(advertising)
         binding.backButton.setOnClickListener{
             saveData()
         }

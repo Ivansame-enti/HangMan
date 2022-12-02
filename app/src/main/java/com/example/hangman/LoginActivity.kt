@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             if(username.isNotEmpty() && password.isNotEmpty()) {  //Cargamos el juego con el nuevo login
                 fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, GameActivity::class.java)
-                    createNewUserSettings()
+                    //createNewUserSettings()
                     startActivity(intent)
 
                 }.addOnFailureListener {
