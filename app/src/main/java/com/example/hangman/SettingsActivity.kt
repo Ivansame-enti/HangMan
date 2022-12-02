@@ -27,7 +27,6 @@ class SettingsActivity : AppCompatActivity() {
         var vibrationFlag = true;
         var notificationFlag = true
         var advertisingFlag = true
-        var id = 1
         supportActionBar?.hide();
 
         fun saveData(){
@@ -62,8 +61,27 @@ class SettingsActivity : AppCompatActivity() {
             notification = sharedPref.getBoolean("notification",true)
             advertising = sharedPref.getBoolean("advertising",true)
         }
-        loadData()
+        fun loadFireStorm(){
+            //val addOnFailureListener = firestore.collection("SettingsValue")
+                //.document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+            var addOnFailureListener = firestore.collection("SettingsValue")
+                    .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+                .get()
+                .addOnSuccessListener { result ->
+                        volume = result["volume"] as Boolean
+                        vibration = result["vibration"] as Boolean
+                        notification = result["notification"] as Boolean
+                        advertising = (result["advertising"] as Boolean)
 
+                    //Toast.makeText(this, "Consulta exitosa", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, volume.toString(), Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Consulta fallada", Toast.LENGTH_SHORT).show()
+                }
+        }
+        //loadData()
+        loadFireStorm()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -163,13 +181,8 @@ class SettingsActivity : AppCompatActivity() {
                 advertisingFlag = false;
             }
         }
-
         binding.backButton.setOnClickListener{
             saveData()
-
-            //Toast.makeText(this, volume.toString(), Toast.LENGTH_SHORT).show()
         }
-
     }
-
 }

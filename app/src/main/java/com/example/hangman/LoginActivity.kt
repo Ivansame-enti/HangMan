@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
             if(username.isNotEmpty() && password.isNotEmpty()) {  //Cargamos el juego con el nuevo login
                 fireBaseAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener {
                     val intent = Intent(this@LoginActivity, GameActivity::class.java)
+                    createNewUserSettings()
                     startActivity(intent)
 
                 }.addOnFailureListener {
@@ -82,5 +83,22 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+    fun createNewUserSettings(){
+        val settingsData = hashMapOf(
+            "volume" to true,
+            "vibration" to true,
+            "notification" to true,
+            "advertising" to true
+        )
+        firestore.collection("SettingsValue")
+            .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+            .set(settingsData)
+            .addOnSuccessListener { result ->
+                Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
+            }
     }
 }
