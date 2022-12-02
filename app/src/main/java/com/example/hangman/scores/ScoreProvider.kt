@@ -4,7 +4,7 @@ class ScoreProvider {
 
     companion object{
 
-        val scoreListDef = listOf<ScoreList>(
+        var scoreListDef = listOf<ScoreList>(
             ScoreList(
                 "ivansales@gmail.com",
                 1000

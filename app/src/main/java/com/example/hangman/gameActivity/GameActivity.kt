@@ -8,6 +8,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -17,6 +18,9 @@ import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.scores.ScoreActivity
+import com.example.hangman.scores.ScoreList
+import com.example.hangman.scores.ScoreProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class GameActivity : AppCompatActivity() {
@@ -40,6 +44,7 @@ class GameActivity : AppCompatActivity() {
     private var gameSolution: String = ""
     var gameIntent = 0
 
+    private lateinit var fireBaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
     private val gameManager = GameManager()
@@ -94,7 +99,12 @@ class GameActivity : AppCompatActivity() {
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
-                    if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
+                    if(letterView.text == "A"){
+                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
+                        gameWord = gameSolution
+                        checkWin()
+                    }
+                    else if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
                         gameWord = gameManager.getWord()
                         showWord()
@@ -109,6 +119,9 @@ class GameActivity : AppCompatActivity() {
         }
 
         loadData() //Carga las settings
+
+        //Creamos instancia de firebase
+        fireBaseAuth = FirebaseAuth.getInstance()
     }
 
     private fun loadData(){
@@ -136,6 +149,10 @@ class GameActivity : AppCompatActivity() {
     private fun checkWin(){
         if(gameWord == gameSolution){
             Handler(Looper.getMainLooper()).postDelayed({
+                val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+
+                if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", 200) //Añadimos el jugador a la ScoreList
+                else ScoreProvider.scoreListDef+= ScoreList("Anonymous", 200) //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, ScoreActivity::class.java)
                 startActivity(intent)
                 finish()

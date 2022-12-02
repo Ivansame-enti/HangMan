@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hangman.LoginActivity
-import com.example.hangman.databinding.ActivityMainBinding
 import com.example.hangman.databinding.ActivityScoreBinding
 import com.example.hangman.scores.adapter.ScoreAdapter
 
