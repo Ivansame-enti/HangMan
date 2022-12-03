@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.hide();
 
         fun saveData(){
-            val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null", Context.MODE_PRIVATE)
+            val sharedPref = getSharedPreferences(currentUser, Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.apply(){
                 putBoolean("volume",volumeFlag)
@@ -53,14 +53,13 @@ class SettingsActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     val intent = Intent(this@SettingsActivity, GameActivity::class.java)
                     startActivity(intent)
-                    finish()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
                 }
         }
         fun loadData(){
-            val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null",Context.MODE_PRIVATE)
+            val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
             volume = sharedPref.getBoolean("volume",true)
             vibration = sharedPref.getBoolean("vibration",true)
             notification = sharedPref.getBoolean("notification",true)
@@ -196,5 +195,5 @@ class SettingsActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener{
             saveData()
         }
-    }//AQUI ACABA
+    }
 }
