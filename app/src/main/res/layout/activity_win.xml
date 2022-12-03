@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
-        android:layout_marginTop="439dp"
+        android:layout_marginTop="420dp"
         android:layout_marginEnd="176dp"
         android:fontFamily="@font/tabitha"
         android:text="Score"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/winScoreTextView" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/winExitButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
@@ -50,12 +50,12 @@
         android:scaleY="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton3"
+        app:layout_constraintStart_toEndOf="@+id/winRestartButton"
         app:layout_constraintTop_toBottomOf="@+id/winNumberTextView"
         app:srcCompat="@drawable/hangedout_exitbutton" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/winRestartButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="64dp"
@@ -65,7 +65,7 @@
         android:contentDescription="RestartButton"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/winExitButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/winNumberTextView"
         app:srcCompat="@drawable/hangedout_restartbutton" />

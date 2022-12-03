@@ -2,8 +2,71 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loseBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/hangedout_youlose"
     tools:context=".winLose.LoseActivity">
 
+    <TextView
+        android:id="@+id/loseScoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="177dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginEnd="176dp"
+        android:fontFamily="@font/tabitha"
+        android:text="Score"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/loseNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="173dp"
+        android:fontFamily="@font/tabitha"
+        android:text="0"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loseScoreTextView" />
+
+    <ImageButton
+        android:id="@+id/loseExitButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="100dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="ExitButton"
+        android:scaleType="centerInside"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/loseRestartButton"
+        app:layout_constraintTop_toBottomOf="@+id/loseNumberTextView"
+        app:srcCompat="@drawable/hangedout_exitbutton" />
+
+    <ImageButton
+        android:id="@+id/loseRestartButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="100dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="RestartButton"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/loseExitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loseNumberTextView"
+        app:srcCompat="@drawable/hangedout_restartbutton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

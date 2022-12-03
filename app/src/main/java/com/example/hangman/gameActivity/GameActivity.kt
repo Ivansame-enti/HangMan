@@ -19,6 +19,8 @@ import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.scores.ScoreActivity
 import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
+import com.example.hangman.winLose.LoseActivity
+import com.example.hangman.winLose.WinActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -149,10 +151,11 @@ class GameActivity : AppCompatActivity() {
         if(gameWord == gameSolution){
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
-
-                if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", 200) //Añadimos el jugador a la ScoreList
-                else ScoreProvider.scoreListDef+= ScoreList("Anonymous", 200) //Añadimos el jugador a la ScoreList
-                val intent = Intent(this@GameActivity, ScoreActivity::class.java)
+                val score = 200
+                if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
+                else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
+                val intent = Intent(this@GameActivity, WinActivity::class.java)
+                intent.putExtra("score", score)
                 startActivity(intent)
                 finish()
             }, TIME_TO_NEXT_ACTIVITY)
@@ -171,7 +174,7 @@ class GameActivity : AppCompatActivity() {
                 gameWord = gameSolution
                 showWord()
                 Handler(Looper.getMainLooper()).postDelayed({
-                    val intent = Intent(this@GameActivity, ScoreActivity::class.java)
+                    val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
                     finish()
                 }, TIME_TO_NEXT_ACTIVITY)
