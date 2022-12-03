@@ -1,12 +1,14 @@
 package com.example.hangman
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.hangman.databinding.ActivitySettingsBinding
+import com.google.androidgamesdk.GameActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -49,7 +51,9 @@ class SettingsActivity : AppCompatActivity() {
                 .document(currentUser)
                 .set(settingsData)
                 .addOnSuccessListener { result ->
-                    Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@SettingsActivity, GameActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
