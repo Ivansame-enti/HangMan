@@ -4,7 +4,7 @@ class ScoreProvider {
 
     companion object{
 
-        var scoreListDef = listOf<ScoreList>(
+        var scoreListDef = listOf(
             ScoreList(
                 "ivansales@gmail.com",
                 1000

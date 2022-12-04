@@ -10,7 +10,7 @@ class ScoreAdapter(private val ScoreList:List<ScoreList>) : RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder {
 
-        var layoutInflater = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         return ScoreViewHolder(layoutInflater.inflate(R.layout.item_scorelist, parent,false))
 
     }
