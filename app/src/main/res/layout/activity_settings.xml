@@ -23,7 +23,8 @@
         app:layout_constraintEnd_toStartOf="@+id/offVolume"
         app:layout_constraintStart_toEndOf="@+id/volumeMute"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
     <Button
         android:id="@+id/offVolume"
@@ -41,7 +42,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/onVolume"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
     <Button
         android:id="@+id/onVibration"
@@ -59,7 +61,8 @@
         app:layout_constraintEnd_toStartOf="@+id/offVibration"
         app:layout_constraintStart_toEndOf="@+id/vibration"
         app:layout_constraintTop_toBottomOf="@+id/onVolume"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/offVibration"
@@ -77,7 +80,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/onVibration"
         app:layout_constraintTop_toBottomOf="@+id/offVolume"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/onNotification"
@@ -95,7 +99,8 @@
         app:layout_constraintEnd_toStartOf="@+id/offNotification"
         app:layout_constraintStart_toEndOf="@+id/notification"
         app:layout_constraintTop_toBottomOf="@+id/onVibration"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
 
     <Button
@@ -114,7 +119,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/onNotification"
         app:layout_constraintTop_toBottomOf="@+id/offVibration"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/onAdvertising"
@@ -132,7 +138,8 @@
         app:layout_constraintEnd_toStartOf="@+id/offAdvertising"
         app:layout_constraintStart_toEndOf="@+id/advertisingText"
         app:layout_constraintTop_toBottomOf="@+id/onNotification"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/offAdvertising"
@@ -150,7 +157,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/onAdvertising"
         app:layout_constraintTop_toBottomOf="@+id/offNotification"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/backButton"
@@ -168,7 +176,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offAdvertising"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="5dp"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/settingsTitle"

@@ -2,59 +2,52 @@ package com.example.hangman
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.example.hangman.databinding.ActivitySettingsBinding
-import com.google.androidgamesdk.GameActivity
+import com.example.hangman.gameActivity.GameActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var fireBaseAuth: FirebaseAuth
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fireBaseAuth = FirebaseAuth.getInstance()
         val firestore = FirebaseFirestore.getInstance()
-        var volume = true;
-        var vibration = true;
-        var notification = true;
-        var advertising = true;
-        var volumeFlag = true;
-        var vibrationFlag = true;
+        var volume = true
+        var vibration = true
+        var notification = true
+        var advertising = true
+        var volumeFlag = true
+        var vibrationFlag = true
         var notificationFlag = true
         var advertisingFlag = true
-        var currentUser = fireBaseAuth.getCurrentUser()?.uid ?: "null"
-        supportActionBar?.hide();
+        val currentUser = fireBaseAuth.currentUser?.uid ?: "null"
+        supportActionBar?.hide()
 
         fun saveData(){
             val sharedPref = getSharedPreferences(currentUser, Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
-            editor.apply(){
+            editor.apply{
                 putBoolean("volume",volumeFlag)
                 putBoolean("vibration",vibrationFlag)
                 putBoolean("notification",notificationFlag)
                 putBoolean("advertising",advertisingFlag)
             }.apply()
             val settingsData = hashMapOf(
-                "volume" to volumeFlag,
-                "vibration" to vibrationFlag,
-                "notification" to notificationFlag,
-                "advertising" to advertisingFlag
+                "volume" to volumeFlag, "vibration" to vibrationFlag, "notification" to notificationFlag, "advertising" to advertisingFlag
             )
             firestore.collection("SettingsValue")
                 .document(currentUser)
                 .set(settingsData)
-                .addOnSuccessListener { result ->
+                .addOnSuccessListener {
                     val intent = Intent(this@SettingsActivity, GameActivity::class.java)
                     startActivity(intent)
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
                 }
         }
@@ -71,7 +64,8 @@ class SettingsActivity : AppCompatActivity() {
             if(volumeFlag){
                 binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
                 binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-            }else if(!volumeFlag){
+            }
+            if(!volumeFlag){
                 binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                 binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
             }
@@ -79,14 +73,14 @@ class SettingsActivity : AppCompatActivity() {
                 if(!volumeFlag){
                     binding.offVolume.backgroundTintList= getColorStateList(R.color.OffColorFalse)
                     binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                    volumeFlag = true;
+                    volumeFlag = true
                 }
             }
             binding.offVolume.setOnClickListener{
                 if(volumeFlag){
                     binding.offVolume.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                     binding.onVolume.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                    volumeFlag = false;
+                    volumeFlag = false
                 }
             }
         }
@@ -96,7 +90,8 @@ class SettingsActivity : AppCompatActivity() {
             if(vibrationFlag){
                 binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
                 binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-            }else if(!vibrationFlag){
+            }
+            if(!vibrationFlag){
                 binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                 binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
             }
@@ -104,14 +99,14 @@ class SettingsActivity : AppCompatActivity() {
                 if(!vibrationFlag){
                     binding.offVibration.backgroundTintList= getColorStateList(R.color.OffColorFalse)
                     binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                    vibrationFlag = true;
+                    vibrationFlag = true
                 }
             }
             binding.offVibration.setOnClickListener{
                 if(vibrationFlag){
                     binding.offVibration.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                     binding.onVibration.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                    vibrationFlag = false;
+                    vibrationFlag = false
                 }
             }
         }
@@ -121,7 +116,8 @@ class SettingsActivity : AppCompatActivity() {
             if(notificationFlag){
                 binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
                 binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-            }else if(!notificationFlag){
+            }
+            if(!notificationFlag){
                 binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                 binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
             }
@@ -129,14 +125,14 @@ class SettingsActivity : AppCompatActivity() {
                 if(!notificationFlag){
                     binding.offNotification.backgroundTintList= getColorStateList(R.color.OffColorFalse)
                     binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                    notificationFlag = true;
+                    notificationFlag = true
                 }
             }
             binding.offNotification.setOnClickListener{
                 if(notificationFlag){
                     binding.offNotification.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                     binding.onNotification.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                    notificationFlag = false;
+                    notificationFlag = false
                 }
             }
         }
@@ -146,7 +142,8 @@ class SettingsActivity : AppCompatActivity() {
             if(advertisingFlag){
                 binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
                 binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorFalse)
-            }else if(!advertisingFlag){
+            }
+            if(!advertisingFlag){
                 binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                 binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
             }
@@ -154,19 +151,19 @@ class SettingsActivity : AppCompatActivity() {
                 if(!advertisingFlag){
                     binding.offAdvertising.backgroundTintList= getColorStateList(R.color.OffColorFalse)
                     binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorTrue)
-                    advertisingFlag = true;
+                    advertisingFlag = true
                 }
             }
             binding.offAdvertising.setOnClickListener{
                 if(advertisingFlag) {
                     binding.offAdvertising.backgroundTintList = getColorStateList(R.color.OffColorTrue)
                     binding.onAdvertising.backgroundTintList = getColorStateList(R.color.OnColorFalse)
-                    advertisingFlag = false;
+                    advertisingFlag = false
                 }
             }
         }
         fun loadFireStorm(){
-            var settingsValors = firestore.collection("SettingsValue")
+            val settingsValors = firestore.collection("SettingsValue")
                     .document(currentUser)
             settingsValors.get()
                 .addOnSuccessListener { result ->
@@ -174,12 +171,12 @@ class SettingsActivity : AppCompatActivity() {
                         vibration = result["vibration"] as Boolean
                         notification = result["notification"] as Boolean
                         advertising = (result["advertising"] as Boolean)
-                    volumeController(volume);
+                    volumeController(volume)
                     vibrationController(vibration)
                     notificationController(notification)
                     advertisingController(advertising)
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     Toast.makeText(this, "Consulta fallada", Toast.LENGTH_SHORT).show()
                 }
         }
