@@ -3,7 +3,6 @@ package com.example.hangman.winLose
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.hangman.LoginRegister.PlayActivity
 import com.example.hangman.databinding.ActivityWinBinding
 import com.example.hangman.gameActivity.GameActivity
 import com.example.hangman.scores.ScoreActivity

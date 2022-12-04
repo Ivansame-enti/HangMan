@@ -16,13 +16,11 @@ import androidx.core.view.isVisible
 import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
-import com.example.hangman.scores.ScoreActivity
 import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
@@ -34,7 +32,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var timer: CountDownTimer
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
-    private lateinit var TimerLayout: TextView
+    private lateinit var timerLayout: TextView
 
     private var volume = true
     private var vibration = true
@@ -43,10 +41,9 @@ class GameActivity : AppCompatActivity() {
 
     private var gameWord: String = ""
     private var gameSolution: String = ""
-    var gameIntent = 0
+    private var gameIntent = 0
 
     private lateinit var fireBaseAuth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
 
     private val gameManager = GameManager()
 
@@ -65,7 +62,7 @@ class GameActivity : AppCompatActivity() {
         binding.leftLeg.isVisible = false
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
-        TimerLayout = binding.TimerLayout
+        timerLayout = binding.TimerLayout
         supportActionBar?.hide()
 
         //Cuenta atras
@@ -73,15 +70,15 @@ class GameActivity : AppCompatActivity() {
             override fun onTick(remaining: Long) {
 
                 if(remaining<10000){
-                    TimerLayout.text = (remaining/1000).toString()
-                    TimerLayout.setTextColor(Color.RED)
+                    timerLayout.text = (remaining/1000).toString()
+                    timerLayout.setTextColor(Color.RED)
                 }else{
-                    TimerLayout.text = (remaining/1000).toString()
+                    timerLayout.text = (remaining/1000).toString()
                 }
             }
 
             override fun onFinish() {
-                TimerLayout.text =getString(R.string.end_time)
+                timerLayout.text =getString(R.string.end_time)
             }
         }
 

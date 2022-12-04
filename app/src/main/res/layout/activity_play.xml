@@ -76,7 +76,7 @@
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
         android:scaleX="1"
-        android:text="Log Out"
+        android:text="@string/log_out"
         android:textSize="20sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -40,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
                                     createNewUserSettings()
                                     startActivity(intent)
                                 }
+                                Toast.makeText(this, "User created", Toast.LENGTH_SHORT).show()
                             }
                     } else Toast.makeText(
                         this,
@@ -65,10 +66,10 @@ class RegisterActivity : AppCompatActivity() {
         }
 
     }
-    fun createNewUserSettings(){
-        val sharedPref = getSharedPreferences(fireBaseAuth.getCurrentUser()?.uid ?: "null", Context.MODE_PRIVATE)
+    private fun createNewUserSettings(){
+        val sharedPref = getSharedPreferences(fireBaseAuth.currentUser?.uid ?: "null", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.apply(){
+        editor.apply{
             putBoolean("volume",true)
             putBoolean("vibration",true)
             putBoolean("notification",true)
@@ -81,12 +82,12 @@ class RegisterActivity : AppCompatActivity() {
             "advertising" to true
         )
         firestore.collection("SettingsValue")
-            .document(fireBaseAuth.getCurrentUser()?.uid ?: "null")
+            .document(fireBaseAuth.currentUser?.uid ?: "null")
             .set(settingsData)
-            .addOnSuccessListener { result ->
+            .addOnSuccessListener { _ ->
                 Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener { _ ->
                 Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
             }
     }
