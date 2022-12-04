@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">HangMan</string>
+    <string name="username">Email</string>
+    <string name="password">Password</string>
+    <string name="appNameImageContentDesc">Imagen que incluye el logotipo del videojuego</string>
+    <string name="postitImageContentDesc">Imagen de un postit</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="go_back">Go Back</string>
+    <string name="play">Play!</string>
+    <string name="play_anonymously">Play Anonymously</string>
+    <string name="you_are_loged_as">You are loged as:</string>
+    <string name="current_email">TextView</string>
+    <string name="title_activity_settings2">SettingsActivity2</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="onVibration">On</string>
+    <string name="offVibration">Off</string>
+    <string name="onNotification">On</string>
+    <string name="offNotification">Off</string>
+    <string name="onAd">On</string>
+    <string name="offAd">Off</string>
+    <string name="backButtonSet">Back</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="volumeText">Volume</string>
+    <string name="vibrationText">Vibration</string>
+    <string name="notificationText">Notification</string>
+    <string name="advertisingText">Advertising</string>
+    <string name="anon">Anonymous</string>
+    <string name="end_time">TIME OVER</string>
+    <string name="score_text">Score</string>
+    <string name="_0">0</string>
+    <string name="exitbutton">ExitButton</string>
+    <string name="restartbutton">RestartButton</string>
+    <string name="log_out">Log Out</string>
+    <string name="game_logo">Game Logo</string>
+    <string name="downloading_resources">Downloading resources...</string>
+    <string name="hint_use_the_vocals">Hint: Use the vocals</string>
+    <string name="image_pen">Image pen</string>
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="c">C</string>
+    <string name="d">D</string>
+    <string name="e">E</string>
+    <string name="f">F</string>
+    <string name="g">G</string>
+    <string name="h">H</string>
+    <string name="i">I</string>
+    <string name="j">J</string>
+    <string name="k">K</string>
+    <string name="l">L</string>
+    <string name="m">M</string>
+    <string name="n">N</string>
+    <string name="o">O</string>
+    <string name="p">P</string>
+    <string name="q">Q</string>
+    <string name="r">R</string>
+    <string name="s">S</string>
+    <string name="t">T</string>
+    <string name="u">U</string>
+    <string name="v">V</string>
+    <string name="w">W</string>
+    <string name="x">X</string>
+    <string name="y">Y</string>
+    <string name="z">Z</string>
+    <string name="default_text">TextView</string>
+    <string name="time_left">Time left:</string>
+    <string name="image_right_leg">Image right leg</string>
+    <string name="image_left_leg">Image left leg</string>
+    <string name="image_right_arm">Image right arm</string>
+    <string name="image_left_arm">Image left arm</string>
+    <string name="image_body">Image body</string>
+    <string name="image_head">Image head</string>
+    <string name="soga_image">Soga Image</string>
+</resources>
