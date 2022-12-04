@@ -26,7 +26,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
 
     //Constantes
-    private val TIME_TO_NEXT_ACTIVITY: Long = 1000
+    private val TIME_TO_NEXT_ACTIVITY: Long = 500
 
     //Variables
     private lateinit var timer: CountDownTimer

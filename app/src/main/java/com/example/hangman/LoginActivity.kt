@@ -104,11 +104,5 @@ class LoginActivity : AppCompatActivity() {
         firestore.collection("SettingsValue")
             .document(fireBaseAuth.currentUser?.uid ?: "null")
             .set(settingsData)
-            .addOnSuccessListener { _ ->
-                Toast.makeText(this, "Guardado exitoso", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { _ ->
-                Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()
-            }
     }
 }
