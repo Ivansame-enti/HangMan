@@ -16,6 +16,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/game_logo"
         android:scaleX="1"
         android:scaleY="1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +30,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="501dp"
         android:layout_marginBottom="4dp"
-        android:text="Downloading resources..."
+        android:fontFamily="@font/golden_chesse"
 
-        android:textSize="20sp"
+        android:text="@string/downloading_resources"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/splahImagePen"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,12 +45,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Hint: Use the vocals"
+        android:fontFamily="@font/golden_chesse"
+        android:text="@string/hint_use_the_vocals"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/splahImagePen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splahImagePen" />
 
     <ProgressBar
         android:id="@+id/splashProgressBar"
@@ -74,6 +78,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/image_pen"
         app:layout_constraintBottom_toTopOf="@+id/splashHintText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

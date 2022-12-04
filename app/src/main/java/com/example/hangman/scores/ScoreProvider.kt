@@ -4,28 +4,19 @@ class ScoreProvider {
 
     companion object{
 
-        val scoreListDef = listOf<ScoreList>( //CREO QUE YA DETECTA QUE ES DE CLASE SCORELIST SIN PONERSELO
+        var scoreListDef = listOf(
             ScoreList(
-                "Pablo",
+                "ivansales@gmail.com",
                 1000
             ),
             ScoreList(
-                "Josep",
-                -10
+                "josepromera@gmail.com",
+                500
             ),
             ScoreList(
-                "Ivan",
-                1
-            ),
-            ScoreList(
-                "Willirex",
-                0
-            ),
-            ScoreList(
-                "Narnia",
-                -3
+                "pabloperpinan@gmail.com",
+                300
             )
-
         )
     }
 }

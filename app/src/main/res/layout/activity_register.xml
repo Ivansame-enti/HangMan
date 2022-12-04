@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/hangedout_login"
-    tools:context=".loginRegister.RegisterActivity">
+    tools:context=".LoginRegister.RegisterActivity">
 
     <ImageView
         android:id="@+id/nameAppImage"
@@ -67,6 +67,7 @@
             android:id="@+id/userInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/golden_chesse"
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -97,6 +98,7 @@
             android:id="@+id/passwordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/golden_chesse"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -128,6 +130,7 @@
             android:id="@+id/confirmPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/golden_chesse"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -139,6 +142,7 @@
         android:layout_marginTop="55dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#9FF44336"
+        android:fontFamily="@font/tabitha"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
         android:scaleX="1"
@@ -160,6 +164,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"
         android:backgroundTint="#050505"
+        android:fontFamily="@font/tabitha"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
         android:scaleX="1"

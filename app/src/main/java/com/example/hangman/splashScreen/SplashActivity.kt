@@ -1,13 +1,9 @@
 package com.example.hangman.splashScreen
 
-import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.example.hangman.LoginActivity
-import com.example.hangman.MainActivity
-import com.example.hangman.databinding.ActivityLoginBinding
 import com.example.hangman.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -18,7 +14,6 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.splashProgressBar.max=100
-        val currentValue=100
 
         //ObjectAnimator.ofInt(binding.splashProgressBar, "progress", currentValue).setDuration(2000).start()
         var value=0
