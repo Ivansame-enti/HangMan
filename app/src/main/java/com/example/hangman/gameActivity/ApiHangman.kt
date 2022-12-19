@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface ApiHangman {
     @POST("hangman")
-    fun createGame() : Call<GameInfo>
+    fun createGame(@Query("lang") lang : String, @Query("maxTries") maxTries : Int) : Call<GameInfo>
 
     @PUT("hangman")
     fun guessLetter(@Query("token") token : String, @Query("letter") letter : String) : Call<GameGuessLetter>

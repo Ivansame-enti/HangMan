@@ -8,6 +8,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -92,7 +93,11 @@ class GameActivity : AppCompatActivity() {
         gameWord = gameManager.startGame() //Empieza la partida
         gameSolution = gameManager.getSolution() //Obtiene la solucion
         showWord() //Muestra la palabra
-
+        Toast.makeText(
+            this,
+            gameWord,
+            Toast.LENGTH_SHORT
+        ).show()
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {

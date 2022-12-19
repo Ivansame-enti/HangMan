@@ -17,14 +17,14 @@ class GameManager {
     private var letterInWord: Boolean = false
 
      fun startGame(): String {
-        outside = Retrofit.Builder().baseUrl("https://hangman-api.herokuapp.com/").addConverterFactory(
+        outside = Retrofit.Builder().baseUrl("http://hangman.enti.cat:5002/").addConverterFactory(
             GsonConverterFactory.create()).build()
         services = outside.create(ApiHangman::class.java)
 
-        services.createGame().enqueue(object : Callback<GameInfo> {
+        services.createGame("en", 6).enqueue(object : Callback<GameInfo> {
             override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
-                gameWord = response.body()?.word ?: ""
-                gameToken = response.body()?.token ?: ""
+                gameWord = response.body()?.word ?: "null"
+                gameToken = response.body()?.token ?: "null"
             }
 
             override fun onFailure(call: Call<GameInfo>, t: Throwable) {
