@@ -113,11 +113,6 @@ class GameActivity : AppCompatActivity() {
             ).show()
         })
 
-        /*gameViewModel.letterInWord.observe(this, Observer {
-            letterInWord = it
-            checkWord()
-        })*/
-
         gameViewModel.letterSelected.observe(this, Observer {
             if(it.correct){
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
