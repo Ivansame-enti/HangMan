@@ -50,8 +50,6 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var fireBaseAuth: FirebaseAuth
 
-    private val gameManager = GameManager()
-
     private val gameViewModel : GameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,20 +128,6 @@ class GameActivity : AppCompatActivity() {
             if (letterView is TextView) {
                 letterView.setOnClickListener {
                     gameViewModel.guessLetter(letterView)
-                    /*if(letterView.text == "A"){
-                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                        gameWord = gameSolution
-                        binding.wordTextView.text = gameSolution
-                        checkWin()
-                    }
-                    else if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
-                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                        checkWin()
-                    } else { //La letra no esta en la palabra
-                        letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
-                        gameIntent++
-                        checkLose()
-                    }*/
                 }
             }
         }
@@ -174,15 +158,6 @@ class GameActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         timer.cancel()
-    }
-
-    private fun checkWord(){
-        if(letterInWord){
-            checkWin()
-        } else {
-            gameIntent++
-            checkLose()
-        }
     }
 
     private fun checkWin(){
