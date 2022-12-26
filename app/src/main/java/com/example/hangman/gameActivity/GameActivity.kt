@@ -9,14 +9,17 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
+import com.example.hangman.gameActivity.viewModel.GameViewModel
 import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
@@ -47,6 +50,8 @@ class GameActivity : AppCompatActivity() {
     private lateinit var fireBaseAuth: FirebaseAuth
 
     private val gameManager = GameManager()
+
+    private val gameViewModel : GameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,14 +95,26 @@ class GameActivity : AppCompatActivity() {
         }
 
         //Api hangman
-        gameWord = gameManager.startGame() //Empieza la partida
-        gameSolution = gameManager.getSolution() //Obtiene la solucion
-        showWord() //Muestra la palabra
-        Toast.makeText(
-            this,
-            gameWord,
-            Toast.LENGTH_SHORT
-        ).show()
+        gameViewModel.startGame()
+
+        gameViewModel.gameWord.observe(this, Observer {
+            gameWord = it.toString()
+            showWord() //Muestra la palabra
+        })
+
+        gameViewModel.gameSolution.observe(this, Observer {
+            gameSolution = it.toString()
+            /*Toast.makeText(
+                this,
+                gameSolution,
+                Toast.LENGTH_SHORT
+            ).show()*/
+        })
+
+        //gameWord = gameManager.startGame() //Empieza la partida
+        //gameSolution = gameManager.getSolution() //Obtiene la solucion
+        //showWord() //Muestra la palabra
+
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
@@ -105,12 +122,13 @@ class GameActivity : AppCompatActivity() {
                     if(letterView.text == "A"){
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
                         gameWord = gameSolution
+                        binding.wordTextView.text = gameSolution
                         checkWin()
                     }
                     else if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                        gameWord = gameManager.getWord()
-                        showWord()
+                        //gameWord = gameManager.getWord()
+                        //showWord()
                         checkWin()
                     } else { //La letra no esta en la palabra
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)

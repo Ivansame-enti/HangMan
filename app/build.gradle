@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.example.hangman'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.hangman"
@@ -71,6 +71,9 @@ dependencies {
     //MVVM
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    implementation 'androidx.activity:activity-ktx:1.6.1'
+
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
