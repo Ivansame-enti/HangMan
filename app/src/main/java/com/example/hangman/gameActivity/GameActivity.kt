@@ -46,6 +46,7 @@ class GameActivity : AppCompatActivity() {
     private var gameWord: String = ""
     private var gameSolution: String = ""
     private var gameIntent = 0
+    private var letterInWord = false
 
     private lateinit var fireBaseAuth: FirebaseAuth
 
@@ -100,26 +101,41 @@ class GameActivity : AppCompatActivity() {
         gameViewModel.gameWord.observe(this, Observer {
             gameWord = it.toString()
             showWord() //Muestra la palabra
+            checkWin()
         })
 
         gameViewModel.gameSolution.observe(this, Observer {
             gameSolution = it.toString()
-            /*Toast.makeText(
+            Toast.makeText(
                 this,
                 gameSolution,
                 Toast.LENGTH_SHORT
-            ).show()*/
+            ).show()
         })
 
-        //gameWord = gameManager.startGame() //Empieza la partida
-        //gameSolution = gameManager.getSolution() //Obtiene la solucion
-        //showWord() //Muestra la palabra
+        /*gameViewModel.letterInWord.observe(this, Observer {
+            letterInWord = it
+            checkWord()
+        })*/
+
+        gameViewModel.letterSelected.observe(this, Observer {
+            if(it.correct){
+                it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
+                checkWin()
+            }
+            else{
+                it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
+                gameIntent++
+                checkLose()
+            }
+        })
 
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
-                    if(letterView.text == "A"){
+                    gameViewModel.guessLetter(letterView)
+                    /*if(letterView.text == "A"){
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
                         gameWord = gameSolution
                         binding.wordTextView.text = gameSolution
@@ -127,14 +143,12 @@ class GameActivity : AppCompatActivity() {
                     }
                     else if(gameManager.guessLetter(letterView)){ //La letra esta en la palabra
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                        //gameWord = gameManager.getWord()
-                        //showWord()
                         checkWin()
                     } else { //La letra no esta en la palabra
                         letterView.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
                         gameIntent++
                         checkLose()
-                    }
+                    }*/
                 }
             }
         }
@@ -165,6 +179,15 @@ class GameActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         timer.cancel()
+    }
+
+    private fun checkWord(){
+        if(letterInWord){
+            checkWin()
+        } else {
+            gameIntent++
+            checkLose()
+        }
     }
 
     private fun checkWin(){

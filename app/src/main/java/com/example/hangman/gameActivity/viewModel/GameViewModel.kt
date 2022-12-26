@@ -1,11 +1,13 @@
 package com.example.hangman.gameActivity.viewModel
 
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hangman.gameActivity.ApiHangman
 import com.example.hangman.gameActivity.GameGuessLetter
 import com.example.hangman.gameActivity.GameInfo
 import com.example.hangman.gameActivity.GameSolution
+import com.example.hangman.gameActivity.model.GameCheckLetter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +22,10 @@ class GameViewModel : ViewModel() {
     val gameWord = MutableLiveData<String>()
     private var gameToken: String = ""
 
-    val gameGuessLetter = MutableLiveData<GameGuessLetter>()
+    //val letterInWord = MutableLiveData<Boolean>()
+    //val gameCheckLetter : GameCheckLetter = TODO()
+    val letterSelected = MutableLiveData<GameCheckLetter>()
+
     val gameSolution = MutableLiveData<String>()
 
     fun startGame() {
@@ -50,6 +55,26 @@ class GameViewModel : ViewModel() {
 
             override fun onFailure(call: Call<GameSolution>, t: Throwable) {
                 gameSolution.postValue("Error on Api")
+            }
+        })
+    }
+
+    fun guessLetter(letter : TextView)
+    {
+        services.guessLetter(gameToken, letter.text[0].toString()).enqueue(object :
+            Callback<GameGuessLetter> {
+            override fun onResponse(call: Call<GameGuessLetter>, response: Response<GameGuessLetter>)
+            {
+                //letterInWord = response.body()?.correct ?: false
+                letterSelected.postValue(GameCheckLetter(letter, response.body()?.correct ?: false))
+                //letterInWord.postValue(response.body()?.correct ?: false)
+                gameWord.postValue(response.body()?.word ?: "")
+                //gameToken = response.body()?.token ?: ""
+            }
+
+            override fun onFailure(call: Call<GameGuessLetter>, t: Throwable)
+            {
+                gameWord.postValue("Error on Api")
             }
         })
     }
