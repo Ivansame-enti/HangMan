@@ -65,27 +65,7 @@
         </activity>
         <activity
             android:name=".LoginRegister.RegisterActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".nasa.NasaActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".quotes.QuotesActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ParticlesActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -100,13 +80,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
