@@ -1,5 +1,8 @@
 package com.example.hangman.gameActivity
 
+import com.example.hangman.gameActivity.model.GameGuessLetter
+import com.example.hangman.gameActivity.model.GameInfo
+import com.example.hangman.gameActivity.model.GameSolution
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST

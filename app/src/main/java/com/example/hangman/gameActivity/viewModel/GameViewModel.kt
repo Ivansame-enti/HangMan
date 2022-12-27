@@ -4,9 +4,9 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hangman.gameActivity.ApiHangman
-import com.example.hangman.gameActivity.GameGuessLetter
-import com.example.hangman.gameActivity.GameInfo
-import com.example.hangman.gameActivity.GameSolution
+import com.example.hangman.gameActivity.model.GameGuessLetter
+import com.example.hangman.gameActivity.model.GameInfo
+import com.example.hangman.gameActivity.model.GameSolution
 import com.example.hangman.gameActivity.model.GameCheckLetter
 import retrofit2.Call
 import retrofit2.Callback
