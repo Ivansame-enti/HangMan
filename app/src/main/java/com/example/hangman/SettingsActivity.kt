@@ -44,8 +44,7 @@ class SettingsActivity : AppCompatActivity() {
                 .document(currentUser)
                 .set(settingsData)
                 .addOnSuccessListener {
-                    val intent = Intent(this@SettingsActivity, GameActivity::class.java)
-                    startActivity(intent)
+                    finish()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Guardado fallado", Toast.LENGTH_SHORT).show()

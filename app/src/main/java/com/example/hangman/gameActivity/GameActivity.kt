@@ -58,13 +58,6 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Accedemos a elementos del layout
-        binding.head.isVisible = false
-        binding.body.isVisible = false
-        binding.rightArm.isVisible = false
-        binding.leftArm.isVisible = false
-        binding.rightLeg.isVisible = false
-        binding.leftLeg.isVisible = false
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
@@ -73,7 +66,6 @@ class GameActivity : AppCompatActivity() {
         //Cuenta atras
         timer = object: CountDownTimer(60000,1){
             override fun onTick(remaining: Long) {
-
                 if(remaining<10000){
                     timerLayout.text = (remaining/1000).toString()
                     timerLayout.setTextColor(Color.RED)
@@ -93,7 +85,7 @@ class GameActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //Api hangman
+        //Usamos el viewModel
         gameViewModel.startGame()
 
         gameViewModel.gameWord.observe(this, Observer {
@@ -114,7 +106,6 @@ class GameActivity : AppCompatActivity() {
         gameViewModel.letterSelected.observe(this, Observer {
             if(it.correct){
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                checkWin()
             }
             else{
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
@@ -134,8 +125,7 @@ class GameActivity : AppCompatActivity() {
 
         loadData() //Carga las settings
 
-        //Creamos instancia de firebase
-        fireBaseAuth = FirebaseAuth.getInstance()
+        fireBaseAuth = FirebaseAuth.getInstance() //Creamos instancia de firebase
     }
 
     private fun loadData(){
@@ -155,9 +145,14 @@ class GameActivity : AppCompatActivity() {
         timer.start()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         timer.cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        timer.start()
     }
 
     private fun checkWin(){
