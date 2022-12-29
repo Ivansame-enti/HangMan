@@ -27,11 +27,11 @@ class LoginActivity : AppCompatActivity() {
         fireBaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        if (fireBaseAuth.currentUser != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
+        /*if (fireBaseAuth.currentUser != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
             val intent = Intent(this@LoginActivity, PlayActivity::class.java)
             startActivity(intent)
             finish()
-        }
+        }*/
 
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()

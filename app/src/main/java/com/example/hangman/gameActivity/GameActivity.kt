@@ -34,6 +34,7 @@ class GameActivity : AppCompatActivity() {
 
     //Variables
     private lateinit var timer: CountDownTimer
+    private var timerActualValue: Long = 60
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
     private lateinit var timerLayout: TextView
@@ -46,7 +47,6 @@ class GameActivity : AppCompatActivity() {
     private var gameWord: String = ""
     private var gameSolution: String = ""
     private var gameIntent = 0
-    private var letterInWord = false
 
     private lateinit var fireBaseAuth: FirebaseAuth
 
@@ -58,34 +58,10 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Accedemos a elementos del layout
-        binding.head.isVisible = false
-        binding.body.isVisible = false
-        binding.rightArm.isVisible = false
-        binding.leftArm.isVisible = false
-        binding.rightLeg.isVisible = false
-        binding.leftLeg.isVisible = false
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
-
-        //Cuenta atras
-        timer = object: CountDownTimer(60000,1){
-            override fun onTick(remaining: Long) {
-
-                if(remaining<10000){
-                    timerLayout.text = (remaining/1000).toString()
-                    timerLayout.setTextColor(Color.RED)
-                }else{
-                    timerLayout.text = (remaining/1000).toString()
-                }
-            }
-
-            override fun onFinish() {
-                timerLayout.text =getString(R.string.end_time)
-            }
-        }
 
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
@@ -93,7 +69,7 @@ class GameActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //Api hangman
+        //Usamos el viewModel
         gameViewModel.startGame()
 
         gameViewModel.gameWord.observe(this, Observer {
@@ -114,7 +90,6 @@ class GameActivity : AppCompatActivity() {
         gameViewModel.letterSelected.observe(this, Observer {
             if(it.correct){
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
-                checkWin()
             }
             else{
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_wrong)
@@ -134,8 +109,7 @@ class GameActivity : AppCompatActivity() {
 
         loadData() //Carga las settings
 
-        //Creamos instancia de firebase
-        fireBaseAuth = FirebaseAuth.getInstance()
+        fireBaseAuth = FirebaseAuth.getInstance() //Creamos instancia de firebase
     }
 
     private fun loadData(){
@@ -150,21 +124,35 @@ class GameActivity : AppCompatActivity() {
         binding.wordTextView.text = gameWord
     }
 
-    override fun onStart() {
-        super.onStart()
-        timer.start()
+    override fun onPause() {
+        super.onPause()
+        timer.cancel()
     }
 
-    override fun onStop() {
-        super.onStop()
-        timer.cancel()
+    override fun onResume() {
+        super.onResume()
+
+        //Activamos el  timer
+        timer = object: CountDownTimer(timerActualValue*1000,1){
+            override fun onTick(remaining: Long) {
+                timerActualValue = remaining/1000
+                timerLayout.text = timerActualValue.toString()
+                if(timerActualValue<10) timerLayout.setTextColor(Color.RED)
+            }
+
+            override fun onFinish() {
+                timerLayout.text =getString(R.string.end_time)
+                gameIntent=6
+                checkLose()
+            }
+        }.start()
     }
 
     private fun checkWin(){
         if(gameWord == gameSolution){
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
-                val score = 200
+                val score = timerActualValue.toInt() * gameWord.count()
                 if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
                 else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
