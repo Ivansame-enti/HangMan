@@ -1,17 +1,19 @@
 package com.example.hangman.gameActivity
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
+import android.media.MediaPlayer
+import android.os.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -27,6 +29,10 @@ import com.example.hangman.winLose.WinActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class GameActivity : AppCompatActivity() {
+    private val CHANNEL_ID = "channel_id_example_01"
+    private val notificationId= 101
+    private lateinit var mediaPlayer: MediaPlayer
+
     private lateinit var binding: ActivityGameBinding
 
     //Constantes
@@ -106,18 +112,40 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
-
-        loadData() //Carga las settings
-
+        fun loadData(){
+            val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+            volume = sharedPref.getBoolean("volume",true)
+            vibration = sharedPref.getBoolean("vibration",true)
+            notification = sharedPref.getBoolean("notification",true)
+            advertising = sharedPref.getBoolean("advertising",true)
+        }
+        //loadData() //Carga las settings
+        createNotificationChannel()
         fireBaseAuth = FirebaseAuth.getInstance() //Creamos instancia de firebase
     }
+    private fun createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "Notification Title "
+            val descriptionText = "Notification description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 
-    private fun loadData(){
-        val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        volume = sharedPref.getBoolean("volume",true)
-        vibration = sharedPref.getBoolean("vibration",true)
-        notification = sharedPref.getBoolean("notification",true)
-        advertising = sharedPref.getBoolean("advertising",true)
+    private fun sendNotification(){
+        val builder = NotificationCompat.Builder(this,CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("You win!")
+            .setContentText("Play more pls")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)){
+            notify(notificationId,builder.build())
+        }
     }
 
     private fun showWord(){
@@ -175,6 +203,9 @@ class GameActivity : AppCompatActivity() {
                 gameWord = gameSolution
                 showWord()
                 Handler(Looper.getMainLooper()).postDelayed({
+                    if(notification){
+                        sendNotification()
+                    }
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
                     finish()
