@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.*
 import android.widget.TextView
 import android.widget.Toast
@@ -122,6 +123,12 @@ class GameActivity : AppCompatActivity() {
         //loadData() //Carga las settings
         createNotificationChannel()
         fireBaseAuth = FirebaseAuth.getInstance() //Creamos instancia de firebase
+
+        var mediaPlayer = MediaPlayer()
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://"+this.packageName+"/"+ R.raw.backgroundmusic))
+        mediaPlayer.prepare()
+        mediaPlayer.isLooping = true
+        mediaPlayer.start()
     }
     private fun createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

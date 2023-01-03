@@ -1,17 +1,22 @@
 package com.example.hangman.splashScreen
 
 import android.content.Intent
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.hangman.LoginActivity
 import com.example.hangman.LoginRegister.PlayActivity
+import com.example.hangman.R
 import com.example.hangman.databinding.ActivitySplashBinding
 import com.google.firebase.auth.FirebaseAuth
+import java.io.IOException
 
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var fireBaseAuth: FirebaseAuth
-
     private lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
