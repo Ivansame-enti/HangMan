@@ -87,4 +87,10 @@
     <string name="image_body">Image body</string>
     <string name="image_head">Image head</string>
     <string name="soga_image">Soga Image</string>
+    <string name="FIRESTORE_COLLECTION_NAME">SettingsValue</string>
+    <string name="SHARED_PREFERENCES_VOLUME">volume</string>
+    <string name="SHARED_PREFERENCES_VIBRATION">vibration</string>
+    <string name="SHARED_PREFERENCES_NOTIS">notification</string>
+    <string name="SHARED_PREFERENCES_ADV">advertising</string>
+
 </resources>

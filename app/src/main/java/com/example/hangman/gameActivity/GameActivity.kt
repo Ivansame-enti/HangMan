@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.*
 import android.widget.TextView
 import android.widget.Toast
@@ -45,7 +44,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
     private lateinit var timerLayout: TextView
-
+    var win = false
     private var volume = true
     private var vibration = true
     private var notification = true
@@ -56,12 +55,18 @@ class GameActivity : AppCompatActivity() {
     private var gameIntent = 0
 
     private lateinit var fireBaseAuth: FirebaseAuth
-
     private val gameViewModel : GameViewModel by viewModels()
+    var mMediaPlayer: MediaPlayer? = null
+    private lateinit var currentUser : String
+    private val SHARED_PREFERENCES_VOLUME = "volume"
+    private val SHARED_PREFERENCES_VIBRATION = "vibration"
+    private val SHARED_PREFERENCES_NOTIS = "notification"
+    private val SHARED_PREFERENCES_ADV = "advertising"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        fireBaseAuth = FirebaseAuth.getInstance()
+        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -69,16 +74,13 @@ class GameActivity : AppCompatActivity() {
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
-
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
-
         //Usamos el viewModel
         gameViewModel.startGame()
-
         gameViewModel.gameWord.observe(this, Observer {
             gameWord = it.toString()
             showWord() //Muestra la palabra
@@ -93,7 +95,6 @@ class GameActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         })
-
         gameViewModel.letterSelected.observe(this, Observer {
             if(it.correct){
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
@@ -104,7 +105,6 @@ class GameActivity : AppCompatActivity() {
                 checkLose()
             }
         })
-
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
@@ -113,22 +113,7 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
-        fun loadData(){
-            val sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-            volume = sharedPref.getBoolean("volume",true)
-            vibration = sharedPref.getBoolean("vibration",true)
-            notification = sharedPref.getBoolean("notification",true)
-            advertising = sharedPref.getBoolean("advertising",true)
-        }
-        //loadData() //Carga las settings
         createNotificationChannel()
-        fireBaseAuth = FirebaseAuth.getInstance() //Creamos instancia de firebase
-
-        var mediaPlayer = MediaPlayer()
-        mediaPlayer.setDataSource(this, Uri.parse("android.resource://"+this.packageName+"/"+ R.raw.backgroundmusic))
-        mediaPlayer.prepare()
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
     }
     private fun createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -142,7 +127,6 @@ class GameActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
     private fun sendNotification(){
         val builder = NotificationCompat.Builder(this,CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -154,19 +138,17 @@ class GameActivity : AppCompatActivity() {
             notify(notificationId,builder.build())
         }
     }
-
     private fun showWord(){
         binding.wordTextView.text = gameWord
     }
-
     override fun onPause() {
         super.onPause()
         timer.cancel()
+        if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
     }
-
     override fun onResume() {
         super.onResume()
-
+        loadData()
         //Activamos el  timer
         timer = object: CountDownTimer(timerActualValue*1000,1){
             override fun onTick(remaining: Long) {
@@ -182,7 +164,6 @@ class GameActivity : AppCompatActivity() {
             }
         }.start()
     }
-
     private fun checkWin(){
         if(gameWord == gameSolution){
             Handler(Looper.getMainLooper()).postDelayed({
@@ -192,12 +173,13 @@ class GameActivity : AppCompatActivity() {
                 else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
                 intent.putExtra("score", score)
+                win = true
+                loadData()
                 startActivity(intent)
                 finish()
             }, TIME_TO_NEXT_ACTIVITY)
         }
     }
-
     private fun checkLose(){
         when (gameIntent) {
             1 -> binding.head.isVisible = true
@@ -210,14 +192,28 @@ class GameActivity : AppCompatActivity() {
                 gameWord = gameSolution
                 showWord()
                 Handler(Looper.getMainLooper()).postDelayed({
-                    if(notification){
-                        sendNotification()
-                    }
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
                     finish()
                 }, TIME_TO_NEXT_ACTIVITY)
             }
+        }
+    }
+    fun loadData(){
+        val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
+        volume = sharedPref.getBoolean(SHARED_PREFERENCES_VOLUME,true)
+        vibration = sharedPref.getBoolean(SHARED_PREFERENCES_VIBRATION,true)
+        notification = sharedPref.getBoolean(SHARED_PREFERENCES_NOTIS,true)
+        advertising = sharedPref.getBoolean(SHARED_PREFERENCES_ADV,true)
+        if(notification && win == true){
+            sendNotification()
+        }
+        if(!volume){
+            if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
+        }else if(volume){
+            mMediaPlayer = MediaPlayer.create(this, R.raw.backgroundmusic)
+            mMediaPlayer!!.isLooping = true
+            mMediaPlayer!!.start()
         }
     }
 }
