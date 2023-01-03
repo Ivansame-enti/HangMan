@@ -60,6 +60,7 @@ class SettingsActivity : AppCompatActivity() {
             vibration = sharedPref.getBoolean(SHARED_PREFERENCES_VIBRATION,true)
             notification = sharedPref.getBoolean(SHARED_PREFERENCES_NOTIS,true)
             advertising = sharedPref.getBoolean(SHARED_PREFERENCES_ADV,true)
+            Toast.makeText(this, notification.toString(), Toast.LENGTH_SHORT).show()
         }
         //BOTONES DE VOLUMEN
         fun volumeController(volumeC: Boolean) {
