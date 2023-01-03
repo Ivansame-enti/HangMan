@@ -57,6 +57,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var fireBaseAuth: FirebaseAuth
     private val gameViewModel : GameViewModel by viewModels()
     var mMediaPlayer: MediaPlayer? = null
+    var ticSound: MediaPlayer? = null
     private lateinit var currentUser : String
     private val SHARED_PREFERENCES_VOLUME = "volume"
     private val SHARED_PREFERENCES_VIBRATION = "vibration"
@@ -110,6 +111,12 @@ class GameActivity : AppCompatActivity() {
             if (letterView is TextView) {
                 letterView.setOnClickListener {
                     gameViewModel.guessLetter(letterView)
+                    val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
+                    volume = sharedPref.getBoolean(SHARED_PREFERENCES_VOLUME,true)
+                    if(volume){
+                        ticSound = MediaPlayer.create(this, R.raw.click)
+                        ticSound!!.start()
+                    }
                 }
             }
         }
@@ -166,6 +173,7 @@ class GameActivity : AppCompatActivity() {
     }
     private fun checkWin(){
         if(gameWord == gameSolution){
+            mMediaPlayer?.pause()
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
                 val score = timerActualValue.toInt() * gameWord.count()
@@ -191,6 +199,7 @@ class GameActivity : AppCompatActivity() {
                 binding.leftLeg.isVisible = true
                 gameWord = gameSolution
                 showWord()
+                mMediaPlayer?.pause()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
