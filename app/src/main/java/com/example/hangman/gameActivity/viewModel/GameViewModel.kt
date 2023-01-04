@@ -1,8 +1,16 @@
 package com.example.hangman.gameActivity.viewModel
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.hangman.R
 import com.example.hangman.gameActivity.ApiHangman
 import com.example.hangman.gameActivity.model.GameGuessLetter
 import com.example.hangman.gameActivity.model.GameInfo

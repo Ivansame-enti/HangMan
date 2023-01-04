@@ -29,22 +29,15 @@ import com.example.hangman.winLose.WinActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class GameActivity : AppCompatActivity() {
-    private val CHANNEL_ID = "channel_id_example_01"
-    private val notificationId= 101
-    private lateinit var mediaPlayer: MediaPlayer
-
     private lateinit var binding: ActivityGameBinding
 
-    //Constantes
     private val TIME_TO_NEXT_ACTIVITY: Long = 500
 
-    //Variables
     private lateinit var timer: CountDownTimer
     private var timerActualValue: Long = 60
     private lateinit var wordTextView: TextView
     private lateinit var lettersLayout: ConstraintLayout
     private lateinit var timerLayout: TextView
-    var win = false
     private var volume = true
     private var vibration = true
     private var notification = true
@@ -56,30 +49,31 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var fireBaseAuth: FirebaseAuth
     private val gameViewModel : GameViewModel by viewModels()
-    var mMediaPlayer: MediaPlayer? = null
-    var ticSound: MediaPlayer? = null
+    private val notificationId= 101
+    private var mMediaPlayer: MediaPlayer? = null
+    private var ticSound: MediaPlayer? = null
     private lateinit var currentUser : String
-    private val SHARED_PREFERENCES_VOLUME = "volume"
-    private val SHARED_PREFERENCES_VIBRATION = "vibration"
-    private val SHARED_PREFERENCES_NOTIS = "notification"
-    private val SHARED_PREFERENCES_ADV = "advertising"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fireBaseAuth = FirebaseAuth.getInstance()
-        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
+
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fireBaseAuth = FirebaseAuth.getInstance()
+        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
 
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
+
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
+
         //Usamos el viewModel
         gameViewModel.startGame()
         gameViewModel.gameWord.observe(this, Observer {
@@ -90,12 +84,9 @@ class GameActivity : AppCompatActivity() {
 
         gameViewModel.gameSolution.observe(this, Observer {
             gameSolution = it.toString()
-            Toast.makeText(
-                this,
-                gameSolution,
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, gameSolution, Toast.LENGTH_SHORT).show()
         })
+
         gameViewModel.letterSelected.observe(this, Observer {
             if(it.correct){
                 it.letter.background = ContextCompat.getDrawable(this@GameActivity, R.drawable.letters_background_right)
@@ -106,13 +97,14 @@ class GameActivity : AppCompatActivity() {
                 checkLose()
             }
         })
+
         //Lee el teclado
         lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
                     gameViewModel.guessLetter(letterView)
                     val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
-                    volume = sharedPref.getBoolean(SHARED_PREFERENCES_VOLUME,true)
+                    volume = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_VOLUME),true)
                     if(volume){
                         ticSound = MediaPlayer.create(this, R.raw.click)
                         ticSound!!.start()
@@ -120,39 +112,16 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+
         createNotificationChannel()
     }
-    private fun createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val name = "Notification Title "
-            val descriptionText = "Notification description"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-    private fun sendNotification(){
-        val builder = NotificationCompat.Builder(this,CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("You win!")
-            .setContentText("Play more pls")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        with(NotificationManagerCompat.from(this)){
-            notify(notificationId,builder.build())
-        }
-    }
-    private fun showWord(){
-        binding.wordTextView.text = gameWord
-    }
     override fun onPause() {
         super.onPause()
         timer.cancel()
         if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
     }
+
     override fun onResume() {
         super.onResume()
         loadData()
@@ -171,6 +140,34 @@ class GameActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    private fun createNotificationChannel(){
+        val name = "Notification Title "
+        val descriptionText = "Notification description"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(getString(R.string.CHANNEL_ID),name,importance).apply {
+            description = descriptionText
+        }
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun sendNotification(){
+        val builder = NotificationCompat.Builder(this,getString(R.string.CHANNEL_ID))
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("You win!")
+            .setContentText("God job, keep playing like that")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)){
+            notify(notificationId,builder.build())
+        }
+    }
+
+    private fun showWord(){
+        binding.wordTextView.text = gameWord
+    }
+
     private fun checkWin(){
         if(gameWord == gameSolution){
             mMediaPlayer?.pause()
@@ -181,13 +178,16 @@ class GameActivity : AppCompatActivity() {
                 else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
                 intent.putExtra("score", score)
-                win = true
+                if(notification){
+                    sendNotification()
+                }
                 loadData()
                 startActivity(intent)
                 finish()
             }, TIME_TO_NEXT_ACTIVITY)
         }
     }
+
     private fun checkLose(){
         when (gameIntent) {
             1 -> binding.head.isVisible = true
@@ -199,8 +199,8 @@ class GameActivity : AppCompatActivity() {
                 binding.leftLeg.isVisible = true
                 gameWord = gameSolution
                 showWord()
-                mMediaPlayer?.pause()
                 Handler(Looper.getMainLooper()).postDelayed({
+                    mMediaPlayer?.pause()
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -208,15 +208,13 @@ class GameActivity : AppCompatActivity() {
             }
         }
     }
-    fun loadData(){
+
+    private fun loadData(){
         val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
-        volume = sharedPref.getBoolean(SHARED_PREFERENCES_VOLUME,true)
-        vibration = sharedPref.getBoolean(SHARED_PREFERENCES_VIBRATION,true)
-        notification = sharedPref.getBoolean(SHARED_PREFERENCES_NOTIS,true)
-        advertising = sharedPref.getBoolean(SHARED_PREFERENCES_ADV,true)
-        if(notification && win == true){
-            sendNotification()
-        }
+        volume = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_VOLUME),true)
+        vibration = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_VIBRATION),true)
+        notification = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_NOTIS),true)
+        advertising = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_ADV),true)
         if(!volume){
             if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
         }else if(volume){

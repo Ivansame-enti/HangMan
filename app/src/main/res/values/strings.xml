@@ -92,5 +92,6 @@
     <string name="SHARED_PREFERENCES_VIBRATION">vibration</string>
     <string name="SHARED_PREFERENCES_NOTIS">notification</string>
     <string name="SHARED_PREFERENCES_ADV">advertising</string>
+    <string name="CHANNEL_ID">channel_id_example_01</string>
 
 </resources>
