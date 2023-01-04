@@ -11,11 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var fireBaseAuth: FirebaseAuth
-    private val FIRESTORE_COLLECTION_NAME = "SettingsValue"
-    private val SHARED_PREFERENCES_VOLUME = "volume"
-    private val SHARED_PREFERENCES_VIBRATION = "vibration"
-    private val SHARED_PREFERENCES_NOTIS = "notification"
-    private val SHARED_PREFERENCES_ADV = "advertising"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +31,15 @@ class SettingsActivity : AppCompatActivity() {
             val sharedPref = getSharedPreferences(currentUser, Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.apply{
-                putBoolean(SHARED_PREFERENCES_VOLUME,volumeFlag)
-                putBoolean(SHARED_PREFERENCES_VIBRATION,vibrationFlag)
-                putBoolean(SHARED_PREFERENCES_NOTIS,notificationFlag)
-                putBoolean(SHARED_PREFERENCES_ADV,advertisingFlag)
+                putBoolean(getString(R.string.SHARED_PREFERENCES_VOLUME),volumeFlag)
+                putBoolean(getString(R.string.SHARED_PREFERENCES_VIBRATION),vibrationFlag)
+                putBoolean(getString(R.string.SHARED_PREFERENCES_NOTIS),notificationFlag)
+                putBoolean(getString(R.string.SHARED_PREFERENCES_ADV),advertisingFlag)
             }.apply()
             val settingsData = hashMapOf(
-                SHARED_PREFERENCES_VOLUME to volumeFlag, SHARED_PREFERENCES_VIBRATION to vibrationFlag, SHARED_PREFERENCES_NOTIS to notificationFlag, SHARED_PREFERENCES_ADV to advertisingFlag
+                getString(R.string.SHARED_PREFERENCES_VOLUME) to volumeFlag, getString(R.string.SHARED_PREFERENCES_VIBRATION) to vibrationFlag, getString(R.string.SHARED_PREFERENCES_NOTIS) to notificationFlag, getString(R.string.SHARED_PREFERENCES_ADV) to advertisingFlag
             )
-            firestore.collection(FIRESTORE_COLLECTION_NAME)
+            firestore.collection(getString(R.string.FIRESTORE_COLLECTION_NAME))
                 .document(currentUser)
                 .set(settingsData)
                 .addOnSuccessListener {
@@ -56,11 +51,10 @@ class SettingsActivity : AppCompatActivity() {
         }
         fun loadData(){
             val sharedPref = getSharedPreferences(currentUser,Context.MODE_PRIVATE)
-            volume = sharedPref.getBoolean(SHARED_PREFERENCES_VOLUME,true)
-            vibration = sharedPref.getBoolean(SHARED_PREFERENCES_VIBRATION,true)
-            notification = sharedPref.getBoolean(SHARED_PREFERENCES_NOTIS,true)
-            advertising = sharedPref.getBoolean(SHARED_PREFERENCES_ADV,true)
-            Toast.makeText(this, notification.toString(), Toast.LENGTH_SHORT).show()
+            volume = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_VOLUME),true)
+            vibration = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_VIBRATION),true)
+            notification = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_NOTIS),true)
+            advertising = sharedPref.getBoolean(getString(R.string.SHARED_PREFERENCES_ADV),true)
         }
         //BOTONES DE VOLUMEN
         fun volumeController(volumeC: Boolean) {
@@ -167,14 +161,14 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         fun loadFireStorm(){
-            val settingsValors = firestore.collection(FIRESTORE_COLLECTION_NAME)
+            val settingsValors = firestore.collection(getString(R.string.FIRESTORE_COLLECTION_NAME))
                     .document(currentUser)
             settingsValors.get()
                 .addOnSuccessListener { result ->
-                        volume = result[SHARED_PREFERENCES_VOLUME] as Boolean
-                        vibration = result[SHARED_PREFERENCES_VIBRATION] as Boolean
-                        notification = result[SHARED_PREFERENCES_NOTIS] as Boolean
-                        advertising = (result[SHARED_PREFERENCES_ADV] as Boolean)
+                        volume = result[getString(R.string.SHARED_PREFERENCES_VOLUME)] as Boolean
+                        vibration = result[getString(R.string.SHARED_PREFERENCES_VIBRATION)] as Boolean
+                        notification = result[getString(R.string.SHARED_PREFERENCES_NOTIS)] as Boolean
+                        advertising = (result[getString(R.string.SHARED_PREFERENCES_ADV)] as Boolean)
                     volumeController(volume)
                     vibrationController(vibration)
                     notificationController(notification)

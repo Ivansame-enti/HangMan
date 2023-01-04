@@ -22,8 +22,6 @@ class GameViewModel : ViewModel() {
     val gameWord = MutableLiveData<String>()
     private var gameToken: String = ""
 
-    //val letterInWord = MutableLiveData<Boolean>()
-    //val gameCheckLetter : GameCheckLetter = TODO()
     val letterSelected = MutableLiveData<GameCheckLetter>()
 
     val gameSolution = MutableLiveData<String>()
@@ -42,7 +40,6 @@ class GameViewModel : ViewModel() {
 
             override fun onFailure(call: Call<GameInfo>, t: Throwable) {
                 gameWord.postValue("Error on Api")
-                //gameWord = "Error on Api"
             }
         })
     }
@@ -65,11 +62,8 @@ class GameViewModel : ViewModel() {
             Callback<GameGuessLetter> {
             override fun onResponse(call: Call<GameGuessLetter>, response: Response<GameGuessLetter>)
             {
-                //letterInWord = response.body()?.correct ?: false
                 letterSelected.postValue(GameCheckLetter(letter, response.body()?.correct ?: false))
-                //letterInWord.postValue(response.body()?.correct ?: false)
                 gameWord.postValue(response.body()?.word ?: "")
-                //gameToken = response.body()?.token ?: ""
             }
 
             override fun onFailure(call: Call<GameGuessLetter>, t: Throwable)

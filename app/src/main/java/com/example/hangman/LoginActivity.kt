@@ -27,12 +27,6 @@ class LoginActivity : AppCompatActivity() {
         fireBaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        /*if (fireBaseAuth.currentUser != null) { //Si ya hay un usuario logueado, cambiamos a la otra actividad
-            val intent = Intent(this@LoginActivity, PlayActivity::class.java)
-            startActivity(intent)
-            finish()
-        }*/
-
         binding.loginButton.setOnClickListener{
             val username = binding.userInput.text.toString()
             val password = binding.passwordInput.text.toString()
@@ -86,7 +80,8 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
     }
-    fun createNewUserSettings(){
+
+    private fun createNewUserSettings(){
         val sharedPref = getSharedPreferences(fireBaseAuth.currentUser?.uid ?: "null", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.apply(){
