@@ -21,8 +21,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.hangman.gameActivity.User
 import com.example.hangman.R
+import com.example.hangman.RewardActivity
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.gameActivity.viewModel.GameViewModel
@@ -30,6 +30,7 @@ import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -66,7 +67,7 @@ class GameActivity : AppCompatActivity() {
 
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        MobileAds.initialize(this) {}
         fireBaseAuth = FirebaseAuth.getInstance()
         currentUser = fireBaseAuth.currentUser?.uid ?: "null"
 
@@ -218,6 +219,7 @@ class GameActivity : AppCompatActivity() {
                     mMediaPlayer?.pause()
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
+                    startActivity(Intent(this,RewardActivity::class.java))
                     finish()
                 }, TIME_TO_NEXT_ACTIVITY)
             }

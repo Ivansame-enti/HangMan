@@ -12,7 +12,8 @@
     <string name="you_are_loged_as">You are loged as:</string>
     <string name="current_email">TextView</string>
     <string name="title_activity_settings2">SettingsActivity2</string>
-
+    <string name="rewarded_ad_id_test">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="rewarded_ad_id_live">ca-app-pub-9272595604543497/5327681433</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
