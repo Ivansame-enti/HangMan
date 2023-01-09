@@ -30,6 +30,7 @@ import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -74,6 +75,16 @@ class GameActivity : AppCompatActivity() {
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
+
+
+        //LANZA EVENTO CADA VEZ QUE INICIA PARTIDA
+        val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val bundle = Bundle()
+        bundle.putString("Message", "Partida Iniciada")
+        analytics.logEvent("level_start",bundle)
+
+
+
 
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
@@ -219,6 +230,19 @@ class GameActivity : AppCompatActivity() {
                     val intent = Intent(this@GameActivity, LoseActivity::class.java)
                     startActivity(intent)
                     finish()
+
+                    val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+                    val bundle = Bundle()
+                    bundle.putBoolean("Answer", true)
+                    analytics.logEvent("new_chance",bundle)
+
+                    //ESTE ES EL DEL ANUNCIO LO PONGO AQUI DE MOMENTO
+
+                   // val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+                  //  val bundle = Bundle()
+                    bundle.putString("Answer", "Anuncio Visto")
+                    analytics.logEvent("show_ad",bundle)
+
                 }, TIME_TO_NEXT_ACTIVITY)
             }
         }
