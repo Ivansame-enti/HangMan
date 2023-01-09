@@ -6,7 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.os.*
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -18,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import com.example.hangman.gameActivity.User
 import com.example.hangman.R
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
@@ -27,9 +31,12 @@ import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
+    private lateinit var database: DatabaseReference
 
     private val TIME_TO_NEXT_ACTIVITY: Long = 500
 
@@ -173,11 +180,19 @@ class GameActivity : AppCompatActivity() {
             mMediaPlayer?.pause()
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+                val index = email.indexOf('@')
+                val username = email.substring(0,index);
                 val score = timerActualValue.toInt() * gameWord.count()
+
                 if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
+
                 else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
                 intent.putExtra("score", score)
+                database = FirebaseDatabase.getInstance().getReference("Players")
+                val User = User(email,score)
+                database.child(username).setValue(User)
+
                 if(notification){
                     sendNotification()
                 }
