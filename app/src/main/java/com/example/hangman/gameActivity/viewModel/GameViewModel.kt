@@ -8,14 +8,17 @@ import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hangman.R
 import com.example.hangman.gameActivity.ApiHangman
+import com.example.hangman.gameActivity.User
 import com.example.hangman.gameActivity.model.GameGuessLetter
 import com.example.hangman.gameActivity.model.GameInfo
 import com.example.hangman.gameActivity.model.GameSolution
 import com.example.hangman.gameActivity.model.GameCheckLetter
+import com.example.hangman.scores.UserRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +29,10 @@ class GameViewModel : ViewModel() {
 
     private lateinit var outside: Retrofit
     private lateinit var services: ApiHangman
+    private val repository : UserRepository
+    private val _allUsers = MutableLiveData<List<User>>()
+    val allUsers: LiveData<List<User>> = _allUsers
+
 
     val gameWord = MutableLiveData<String>()
     private var gameToken: String = ""
@@ -33,6 +40,12 @@ class GameViewModel : ViewModel() {
     val letterSelected = MutableLiveData<GameCheckLetter>()
 
     val gameSolution = MutableLiveData<String>()
+
+    init {
+        repository = UserRepository().getInstance()
+        repository.loadUsers(_allUsers)
+    }
+
 
     fun startGame() {
         outside = Retrofit.Builder().baseUrl("http://hangman.enti.cat:5002/").addConverterFactory(
