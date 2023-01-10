@@ -56,8 +56,8 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.userInput.setOnFocusChangeListener { _, b ->
-            if(!b){ //Cuando perdemos el focus
+        binding.userInput.setOnFocusChangeListener { _, focus ->
+            if(!focus){
                 val username = binding.userInput.text.toString()
                 if(!Patterns.EMAIL_ADDRESS.matcher(username).matches())
                     binding.userInput.error = "Invalid username"

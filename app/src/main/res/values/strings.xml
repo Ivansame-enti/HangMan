@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HangMan</string>
+    <string name="app_name">HangedOut</string>
     <string name="username">Email</string>
     <string name="password">Password</string>
     <string name="appNameImageContentDesc">Imagen que incluye el logotipo del videojuego</string>
@@ -12,7 +12,8 @@
     <string name="you_are_loged_as">You are loged as:</string>
     <string name="current_email">TextView</string>
     <string name="title_activity_settings2">SettingsActivity2</string>
-
+    <string name="rewarded_ad_id_test">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="rewarded_ad_id_live">ca-app-pub-9272595604543497/5327681433</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -87,4 +88,11 @@
     <string name="image_body">Image body</string>
     <string name="image_head">Image head</string>
     <string name="soga_image">Soga Image</string>
+    <string name="FIRESTORE_COLLECTION_NAME">SettingsValue</string>
+    <string name="SHARED_PREFERENCES_VOLUME">volume</string>
+    <string name="SHARED_PREFERENCES_VIBRATION">vibration</string>
+    <string name="SHARED_PREFERENCES_NOTIS">notification</string>
+    <string name="SHARED_PREFERENCES_ADV">advertising</string>
+    <string name="CHANNEL_ID">channel_id_example_01</string>
+
 </resources>
