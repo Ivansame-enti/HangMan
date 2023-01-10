@@ -1,6 +1,7 @@
 package com.example.hangman
 
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class RewardActivity: AppCompatActivity() {
 
@@ -42,9 +44,19 @@ class RewardActivity: AppCompatActivity() {
         exitBtn=findViewById(R.id.ExitBtn)
 
         showAdBtn.setOnClickListener(){
-        showRewaredAd()
+            //LANZA EVENTO CADA VEZ QUE SE ELIGE VER EL ANUNCIO
+            val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+            val bundle = Bundle()
+            bundle.putBoolean("new_chance", true)
+            analytics.logEvent("new_chance",bundle)
+            showRewaredAd()
         }
         exitBtn.setOnClickListener(){//Hacer que salga de la app
+            //LANZA EVENTO CADA VEZ QUE SE ELIGE  NO VER EL ANUNCIO
+            val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+            val bundle = Bundle()
+            bundle.putBoolean("new_chance", false)
+            analytics.logEvent("new_chance",bundle)
 
             val intent = Intent(this@RewardActivity, LoseActivity::class.java)
             startActivity(intent)
@@ -56,6 +68,11 @@ class RewardActivity: AppCompatActivity() {
 
         if(mRewardedAd!=null){
             //SE HA CARGADO EL ANUNCIO
+            //LANZA EVENTO CADA VEZ QUE SE VE UN ANUNCIO
+            val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+            val bundle = Bundle()
+            bundle.putString("message", "MirandoAnuncio")
+            analytics.logEvent("show_ad",bundle)
 
             mRewardedAd!!.fullScreenContentCallback = object : FullScreenContentCallback(){
                 override fun onAdClicked() {
