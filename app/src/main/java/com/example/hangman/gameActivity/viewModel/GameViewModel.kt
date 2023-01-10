@@ -18,6 +18,7 @@ import com.example.hangman.gameActivity.model.GameGuessLetter
 import com.example.hangman.gameActivity.model.GameInfo
 import com.example.hangman.gameActivity.model.GameSolution
 import com.example.hangman.gameActivity.model.GameCheckLetter
+import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.UserRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,8 +31,16 @@ class GameViewModel : ViewModel() {
     private lateinit var outside: Retrofit
     private lateinit var services: ApiHangman
     private val repository : UserRepository
-    private val _allUsers = MutableLiveData<List<User>>()
-    val allUsers: LiveData<List<User>> = _allUsers
+
+
+
+
+
+
+    companion object{
+        private val _allUsers = MutableLiveData<List<User>>()
+        val allUsers: LiveData<List<User>> = _allUsers
+    }
 
 
     val gameWord = MutableLiveData<String>()
