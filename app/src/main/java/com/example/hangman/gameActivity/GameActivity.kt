@@ -203,25 +203,29 @@ class GameActivity : AppCompatActivity() {
     private fun checkWin(){
         if(gameWord == gameSolution){
             mMediaPlayer?.pause()
-            Handler(Looper.getMainLooper()).postDelayed({
-                val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
-                var username:String
-                if(email.isEmpty()){
+            val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+            var username:String
+            if(email.isEmpty()){
                 username = "Anonymous"
-                }else{
+            }else{
                 val index = email.indexOf('@')
                 username = email.substring(0,index)
-                }
-                val score = timerActualValue.toInt() * gameWord.count()
+            }
+            val score = timerActualValue.toInt() * gameWord.count()
+            database = FirebaseDatabase.getInstance().getReference("Players")
+            val User = User(email,score)
+            database.child(username).setValue(User)
 
-                if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
+            ScoreProvider.GetData()
 
-                else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
+            Handler(Looper.getMainLooper()).postDelayed({
+
+               // if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", "score:$score") //Añadimos el jugador a la ScoreList
+
+               // else ScoreProvider.scoreListDef+= ScoreList("Anonymous", "score:$score") //Añadimos el jugador a la ScoreList
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
                 intent.putExtra("score", score)
-                database = FirebaseDatabase.getInstance().getReference("Players")
-                val User = User(email,score)
-                database.child(username).setValue(User)
+
 
                 if(notification){
                     sendNotification()

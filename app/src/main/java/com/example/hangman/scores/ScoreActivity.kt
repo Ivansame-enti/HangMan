@@ -23,7 +23,7 @@ class ScoreActivity : AppCompatActivity() {
     private fun initRecycledView(){
 
         binding.RecycledScore.layoutManager  = LinearLayoutManager(this)
-        ScoreProvider.GetData()
+
         binding.RecycledScore.adapter = ScoreAdapter(ScoreProvider.scoreListDef)
 
         binding.goBackButton.setOnClickListener{
