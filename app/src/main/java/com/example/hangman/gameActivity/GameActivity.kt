@@ -21,8 +21,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.hangman.gameActivity.User
 import com.example.hangman.R
+import com.example.hangman.RewardActivity
 import com.example.hangman.SettingsActivity
 import com.example.hangman.databinding.ActivityGameBinding
 import com.example.hangman.gameActivity.viewModel.GameViewModel
@@ -30,7 +30,11 @@ import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -62,30 +66,21 @@ class GameActivity : AppCompatActivity() {
     private var ticSound: MediaPlayer? = null
     private lateinit var currentUser : String
 
+    companion object{
+        var isAdView = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        fireBaseAuth = FirebaseAuth.getInstance()
-        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
-
+        MobileAds.initialize(this) {}
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
-
-
-        //LANZA EVENTO CADA VEZ QUE INICIA PARTIDA
-        val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        val bundle = Bundle()
-        bundle.putString("Message", "Partida Iniciada")
-        analytics.logEvent("level_start",bundle)
-
-
-
-
+        isAdView = false
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
@@ -142,7 +137,21 @@ class GameActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        fireBaseAuth = FirebaseAuth.getInstance()
+        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
         loadData()
+        loadRewardAd()
+
+        if(isAdView){
+            gameIntent = 0
+             binding.head.isVisible = false
+             binding.body.isVisible = false
+             binding.rightArm.isVisible = false
+             binding.leftArm.isVisible = false
+             binding.rightLeg.isVisible = false
+             binding.leftLeg.isVisible = false
+             isAdView=false
+        }
         //Activamos el  timer
         timer = object: CountDownTimer(timerActualValue*1000,1){
             override fun onTick(remaining: Long) {
@@ -157,6 +166,11 @@ class GameActivity : AppCompatActivity() {
                 checkLose()
             }
         }.start()
+        if(gameIntent==6){
+            val intent = Intent(this@GameActivity, LoseActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun createNotificationChannel(){
@@ -191,8 +205,13 @@ class GameActivity : AppCompatActivity() {
             mMediaPlayer?.pause()
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+                var username:String
+                if(email.isEmpty()){
+                username = "Anonymous"
+                }else{
                 val index = email.indexOf('@')
-                val username = email.substring(0,index);
+                username = email.substring(0,index)
+                }
                 val score = timerActualValue.toInt() * gameWord.count()
 
                 if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
@@ -223,27 +242,9 @@ class GameActivity : AppCompatActivity() {
             5 -> binding.rightLeg.isVisible = true
             6 -> {
                 binding.leftLeg.isVisible = true
-                gameWord = gameSolution
-                showWord()
-                Handler(Looper.getMainLooper()).postDelayed({
                     mMediaPlayer?.pause()
-                    val intent = Intent(this@GameActivity, LoseActivity::class.java)
-                    startActivity(intent)
-                    finish()
-
-                    val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-                    val bundle = Bundle()
-                    bundle.putBoolean("Answer", true)
-                    analytics.logEvent("new_chance",bundle)
-
-                    //ESTE ES EL DEL ANUNCIO LO PONGO AQUI DE MOMENTO
-
-                   // val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-                  //  val bundle = Bundle()
-                    bundle.putString("Answer", "Anuncio Visto")
-                    analytics.logEvent("show_ad",bundle)
-
-                }, TIME_TO_NEXT_ACTIVITY)
+                val intent = Intent(this@GameActivity, RewardActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -261,5 +262,26 @@ class GameActivity : AppCompatActivity() {
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.start()
         }
+    }
+
+    private fun loadRewardAd(){
+        RewardedAd.load(
+            this,
+            "ca-app-pub-3940256099942544/5224354917",
+            AdRequest.Builder().build(),
+            object: RewardedAdLoadCallback(){
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    RewardActivity.mRewardedAd =null
+                }
+
+                override fun onAdLoaded(RewardedAd: RewardedAd) {
+                    super.onAdLoaded(RewardedAd)
+
+
+                    RewardActivity.mRewardedAd = RewardedAd
+                }
+            }
+        )
     }
 }

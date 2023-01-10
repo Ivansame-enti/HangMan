@@ -1,13 +1,16 @@
 package com.example.hangman.gameActivity.viewModel
 
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hangman.R
@@ -16,13 +19,14 @@ import com.example.hangman.gameActivity.model.GameGuessLetter
 import com.example.hangman.gameActivity.model.GameInfo
 import com.example.hangman.gameActivity.model.GameSolution
 import com.example.hangman.gameActivity.model.GameCheckLetter
+import com.google.firebase.analytics.FirebaseAnalytics
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GameViewModel : ViewModel() {
+class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private lateinit var outside: Retrofit
     private lateinit var services: ApiHangman
@@ -39,12 +43,20 @@ class GameViewModel : ViewModel() {
             GsonConverterFactory.create()).build()
         services = outside.create(ApiHangman::class.java)
 
-        services.createGame("en", 6).enqueue(object : Callback<GameInfo> {
+        services.createGame("en", 50).enqueue(object : Callback<GameInfo> {
             override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
                 gameToken = response.body()?.token ?: "null"
                 gameWord.postValue(response.body()?.word ?: "null")
                 getSolution()
+
+                //LANZA EVENTO CADA VEZ QUE INICIA PARTIDA
+                val context = getApplication<Application>().applicationContext
+                val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+                val bundle = Bundle()
+                bundle.putString("Message", "Partida Iniciada")
+                analytics.logEvent("level_start",bundle)
             }
+
 
             override fun onFailure(call: Call<GameInfo>, t: Throwable) {
                 gameWord.postValue("Error on Api")
@@ -80,5 +92,6 @@ class GameViewModel : ViewModel() {
             }
         })
     }
+
 
 }
