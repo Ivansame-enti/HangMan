@@ -179,7 +179,7 @@ class GameActivity : AppCompatActivity() {
             var username:String
             val score = timerActualValue.toInt() * gameWord.count()
 
-            if(email.isEmpty()){
+            if(email.isEmpty() || email == "Anonymous"){
                 username = "Anonymous"
             }else{
                 val index = email.indexOf('@')
