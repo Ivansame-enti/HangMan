@@ -166,6 +166,11 @@ class GameActivity : AppCompatActivity() {
                 checkLose()
             }
         }.start()
+        if(gameIntent==6){
+            val intent = Intent(this@GameActivity, LoseActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun createNotificationChannel(){
