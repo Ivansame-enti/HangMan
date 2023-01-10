@@ -6,7 +6,7 @@ class ScoreProvider {
 
         var scoreListDef = listOf(
             ScoreList(
-                "ivansales@gmail.com",
+                "ivansales2@gmail.com",
                 1000
             ),
             ScoreList(
