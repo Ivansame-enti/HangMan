@@ -1,7 +1,5 @@
 package com.example.hangman
 
-
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.hangman.gameActivity.GameActivity
 import com.example.hangman.winLose.LoseActivity
 import com.google.android.gms.ads.*
-import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.analytics.FirebaseAnalytics
 

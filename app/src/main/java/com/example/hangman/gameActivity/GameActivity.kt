@@ -175,33 +175,27 @@ class GameActivity : AppCompatActivity() {
     private fun checkWin(){
         if(gameWord == gameSolution){
             mMediaPlayer?.pause()
+            val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+            var username:String
+            val score = timerActualValue.toInt() * gameWord.count()
+
+            if(email.isEmpty()){
+                username = "Anonymous"
+            }else{
+                val index = email.indexOf('@')
+                username = email.substring(0,index)
+            }
+
+            database = FirebaseDatabase.getInstance().getReference("Players")
+            val User = User(email,score)
+            database.child(username).setValue(User)
+            ScoreProvider.GetData()
 
             Handler(Looper.getMainLooper()).postDelayed({
-                val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
-                var username:String
-                val score = timerActualValue.toInt() * gameWord.count()
-
-                if(email.isEmpty()){
-                    username = "Anonymous"
-                }else{
-                    val index = email.indexOf('@')
-                    username = email.substring(0,index)
-                }
-
-                database = FirebaseDatabase.getInstance().getReference("Players")
-                val User = User(email,score)
-                database.child(username).setValue(User)
-
-                if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
-                else ScoreProvider.scoreListDef+= ScoreList("Anonymous", score) //Añadimos el jugador a la ScoreList
-
                 val intent = Intent(this@GameActivity, WinActivity::class.java)
                 intent.putExtra("score", score)
 
-                if(notification){
-                    gameViewModel.sendNotification()
-                }
-
+                if(notification) gameViewModel.sendNotification()
                 loadData()
                 startActivity(intent)
                 finish()
