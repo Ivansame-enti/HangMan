@@ -1,10 +1,13 @@
 package com.example.hangman
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.hangman.gameActivity.GameActivity
+import com.example.hangman.winLose.LoseActivity
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -13,15 +16,13 @@ import com.google.android.material.button.MaterialButton
 
 class RewardActivity: AppCompatActivity() {
 
-
-    private companion object{
+    companion object{
         const val TAG = "REWARED_AD_TAG"
+        var mRewardedAd: RewardedAd? = null
     }
 
     private lateinit var showAdBtn: MaterialButton
     private lateinit var exitBtn: MaterialButton
-
-    private var mRewardedAd: RewardedAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -37,47 +38,22 @@ class RewardActivity: AppCompatActivity() {
                 .setTestDeviceIds(listOf("TEST DEVICE ID HERE","TEST DEVICE ID HERE" ))
                 .build()
         )
-
-        loadRewardAd()
-
         showAdBtn=findViewById(R.id.showAdBtn)
         exitBtn=findViewById(R.id.ExitBtn)
 
         showAdBtn.setOnClickListener(){
-
+        showRewaredAd()
         }
-
         exitBtn.setOnClickListener(){//Hacer que salga de la app
 
+            val intent = Intent(this@RewardActivity, LoseActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
-    private fun loadRewardAd(){
+    private fun showRewaredAd() {
 
-
-        RewardedAd.load(
-            this,
-            getString(R.string.rewarded_ad_id_live),
-            AdRequest.Builder().build(), 
-            object: RewardedAdLoadCallback(){
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    super.onAdFailedToLoad(adError)
-                        Log.d(TAG,"A fallado")
-                    mRewardedAd=null
-                }
-
-                override fun onAdLoaded(RewardedAd: RewardedAd) {
-                    super.onAdLoaded(RewardedAd)
-
-                    Log.d(TAG,"Hay anuncio")
-                    mRewardedAd= RewardedAd
-                }
-            }
-        )
-    }
-
-
-    private fun showRewaredAd(){
         if(mRewardedAd!=null){
             //SE HA CARGADO EL ANUNCIO
 
@@ -91,7 +67,7 @@ class RewardActivity: AppCompatActivity() {
                     super.onAdDismissedFullScreenContent()
                     Log.d(TAG,"onAdDismissedFullScreenContent: ")
                     mRewardedAd=null
-                    loadRewardAd()
+
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -116,17 +92,14 @@ class RewardActivity: AppCompatActivity() {
 
             mRewardedAd!!.show(this){
                 Log.d(TAG,"showRewaredAd: ")
-                Toast.makeText(this,"REWARD EARNED!!!!", Toast.LENGTH_SHORT).show()
+                GameActivity.isAdView = true
+                finish()
 
             }
 
         }
         else{
-            Toast.makeText(this,"No se ha cargado la vaina de anuncio", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"No se ha cargado aun el anuncio", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-
 }

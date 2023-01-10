@@ -39,7 +39,7 @@ class GameViewModel : ViewModel() {
             GsonConverterFactory.create()).build()
         services = outside.create(ApiHangman::class.java)
 
-        services.createGame("en", 6).enqueue(object : Callback<GameInfo> {
+        services.createGame("en", 50).enqueue(object : Callback<GameInfo> {
             override fun onResponse(call: Call<GameInfo>, response: Response<GameInfo>) {
                 gameToken = response.body()?.token ?: "null"
                 gameWord.postValue(response.body()?.word ?: "null")
@@ -80,5 +80,6 @@ class GameViewModel : ViewModel() {
             }
         })
     }
+
 
 }

@@ -3,9 +3,15 @@ package com.example.hangman.splashScreen
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.hangman.LoginActivity
 import com.example.hangman.LoginRegister.PlayActivity
+import com.example.hangman.RewardActivity
 import com.example.hangman.databinding.ActivitySplashBinding
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
@@ -40,4 +46,5 @@ class SplashActivity : AppCompatActivity() {
             }
         }).start()
     }
+
 }

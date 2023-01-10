@@ -30,7 +30,11 @@ import com.example.hangman.scores.ScoreList
 import com.example.hangman.scores.ScoreProvider
 import com.example.hangman.winLose.LoseActivity
 import com.example.hangman.winLose.WinActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -62,20 +66,21 @@ class GameActivity : AppCompatActivity() {
     private var ticSound: MediaPlayer? = null
     private lateinit var currentUser : String
 
+    companion object{
+        var isAdView = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         MobileAds.initialize(this) {}
-        fireBaseAuth = FirebaseAuth.getInstance()
-        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
-
         wordTextView = binding.wordTextView
         lettersLayout = binding.lettersLayout
         timerLayout = binding.TimerLayout
         supportActionBar?.hide()
-
+        isAdView = false
         //Boton de settings
         binding.layout.settingsButton.setOnClickListener{
             val intent = Intent(this@GameActivity, SettingsActivity::class.java)
@@ -132,7 +137,21 @@ class GameActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        fireBaseAuth = FirebaseAuth.getInstance()
+        currentUser = fireBaseAuth.currentUser?.uid ?: "null"
         loadData()
+        loadRewardAd()
+
+        if(isAdView){
+            gameIntent = 0
+             binding.head.isVisible = false
+             binding.body.isVisible = false
+             binding.rightArm.isVisible = false
+             binding.leftArm.isVisible = false
+             binding.rightLeg.isVisible = false
+             binding.leftLeg.isVisible = false
+             isAdView=false
+        }
         //Activamos el  timer
         timer = object: CountDownTimer(timerActualValue*1000,1){
             override fun onTick(remaining: Long) {
@@ -181,8 +200,13 @@ class GameActivity : AppCompatActivity() {
             mMediaPlayer?.pause()
             Handler(Looper.getMainLooper()).postDelayed({
                 val email = fireBaseAuth.currentUser?.email ?:"Anonymous"
+                var username:String
+                if(email.isEmpty()){
+                username = "Anonymous"
+                }else{
                 val index = email.indexOf('@')
-                val username = email.substring(0,index);
+                username = email.substring(0,index)
+                }
                 val score = timerActualValue.toInt() * gameWord.count()
 
                 if(email.isNotEmpty()) ScoreProvider.scoreListDef+= ScoreList(fireBaseAuth.currentUser?.email ?:"Anonymous", score) //Añadimos el jugador a la ScoreList
@@ -213,15 +237,9 @@ class GameActivity : AppCompatActivity() {
             5 -> binding.rightLeg.isVisible = true
             6 -> {
                 binding.leftLeg.isVisible = true
-                gameWord = gameSolution
-                showWord()
-                Handler(Looper.getMainLooper()).postDelayed({
                     mMediaPlayer?.pause()
-                    val intent = Intent(this@GameActivity, LoseActivity::class.java)
-                    startActivity(intent)
-                    startActivity(Intent(this,RewardActivity::class.java))
-                    finish()
-                }, TIME_TO_NEXT_ACTIVITY)
+                val intent = Intent(this@GameActivity, RewardActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -239,5 +257,26 @@ class GameActivity : AppCompatActivity() {
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.start()
         }
+    }
+
+    private fun loadRewardAd(){
+        RewardedAd.load(
+            this,
+            "ca-app-pub-3940256099942544/5224354917",
+            AdRequest.Builder().build(),
+            object: RewardedAdLoadCallback(){
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    RewardActivity.mRewardedAd =null
+                }
+
+                override fun onAdLoaded(RewardedAd: RewardedAd) {
+                    super.onAdLoaded(RewardedAd)
+
+
+                    RewardActivity.mRewardedAd = RewardedAd
+                }
+            }
+        )
     }
 }
